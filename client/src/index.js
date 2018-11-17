@@ -7,5 +7,6 @@ require("../styles/application.scss");
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.js';
+import Audio from './components/browser_audio/browser_audio.jsx'
 
-ReactDOM.render(<App/>, document.getElementById('react-root'));
+ReactDOM.render(<Audio/>, document.getElementById('react-root'));
