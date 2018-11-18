@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {startRecording, stopRecording} from './helper.js'
+import {startRecording, stopRecording, RecordedAudio} from './helper.js'
 import recorder from './recorder.js'
 
 class Audio extends Component {
