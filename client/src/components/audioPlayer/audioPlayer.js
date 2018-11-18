@@ -35,10 +35,6 @@ class AudioPlayer extends Component {
         var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         audioCtx.decodeAudioData(data, buffer => {
 
-          // var nowBuffering = buffer.getChannelData(0)
-          // for (var i = 0; i < byteArray.length; i++) {
-          //     nowBuffering[i] = byteArray[i];
-          // }
 
           console.log("adding buffer to audioCache")
           audioCache.push(buffer);

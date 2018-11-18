@@ -39,7 +39,7 @@ binaryServer.on('connection', client => {
       if(binaryServer.clients.hasOwnProperty(id)) {
         let otherClient = binaryServer.clients[id];
         // let send = otherClient.createStream(meta);
-        let send = otherClient.createStream({data: 'audio'});
+        let send = otherClient.createStream({data: 'audio', cake: 'vanilla'});
         stream.pipe(send);
       }
     }
@@ -48,29 +48,4 @@ binaryServer.on('connection', client => {
       console.log("audio stream ended.")
     });
 
-
-
-
-  // //MANAGE INCOMING AUDIO FROM ANY PARTICULAR CLIENT
-  // client.on('stream', (stream, meta) => {
-  //   console.log("incoming audio stream");
-
-  //   //LOOP OVER ALL CLIENTS AND BROADCAST TO ALL OTHER CLIENT (NOT THE STREAMING CLIENT)
-  //   for(let id in binaryServer.clients) {
-  //     if(binaryServer.clients.hasOwnProperty(id)) {
-  //       let otherClient = binaryServer.clients[id];
-
-  //       if(otherClient != client) {
-  //         // let send = otherClient.createStream(meta);
-  //         let send = otherClient.createStream({data: 'audio'});
-  //         stream.pipe(send);
-  //       }
-  //     }
-  //   }
-
-  //   stream.on('end', () => {
-  //     console.log("audio stream ended.")
-  //   });
-
-  // });
 });
