@@ -6,7 +6,7 @@
 ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
 ### Usage
 
-Setup google account:
+Setup google cloud account:
 
 - In the Google Clour Platform Console, go to the Create service account key page. [link to google account credential ](https://console.cloud.google.com/apis/credentials/serviceaccountkey?_ga=2.104477824.-1895077828.1541163389 "Go to create service account key page")
 - From the Service account drop-down list, select New service account.
