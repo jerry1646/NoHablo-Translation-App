@@ -103,7 +103,8 @@ function getWavAudio(blob){
 // var module={};
 module.exports = {
     startRecording: startRecording,
-    stopRecording: stopRecording
+    stopRecording: stopRecording,
+    RecordedAudio:RecordedAudio
 }
 
 
