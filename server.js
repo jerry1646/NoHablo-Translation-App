@@ -32,21 +32,26 @@ const binaryServer = new BinaryServer({server: server, path: '/binary-endpoint'}
 binaryServer.on('connection', client => {
   console.log("binaryServer connection established");
 
-  let stream = fs.createReadStream(file_path);
+  client.on('stream',data =>{
+    console.log('this is the server receiving blob data', data);
+  })
 
-  // LOOP OVER ALL CLIENTS AND BROADCAST TO ALL OTHER CLIENT (NOT THE STREAMING CLIENT)
-    for(let id in binaryServer.clients) {
-      if(binaryServer.clients.hasOwnProperty(id)) {
-        let otherClient = binaryServer.clients[id];
-        // let send = otherClient.createStream(meta);
-        let send = otherClient.createStream({data: 'audio', cake: 'vanilla'});
-        stream.pipe(send);
-      }
-    }
 
-    stream.on('end', () => {
-      console.log("audio stream ended.")
-    });
+  // let stream = fs.createReadStream(file_path);
+
+  // // LOOP OVER ALL CLIENTS AND BROADCAST TO ALL OTHER CLIENT (NOT THE STREAMING CLIENT)
+  //   for(let id in binaryServer.clients) {
+  //     if(binaryServer.clients.hasOwnProperty(id)) {
+  //       let otherClient = binaryServer.clients[id];
+  //       // let send = otherClient.createStream(meta);
+  //       let send = otherClient.createStream({data: 'audio', cake: 'vanilla'});
+  //       stream.pipe(send);
+  //     }
+  //   }
+
+  //   stream.on('end', () => {
+  //     console.log("audio stream ended.")
+  //   });
 
 });
 
