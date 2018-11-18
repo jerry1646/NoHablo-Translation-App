@@ -12,8 +12,6 @@ app.get('/api/users', (req, res) => {
   res.json(users)
 })
 
-
-
 const port = 5000
 
 app.listen(port, () => {

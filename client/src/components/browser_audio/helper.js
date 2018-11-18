@@ -7,6 +7,43 @@ var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContext; //new audio context to help us record
 var RecordedAudio = new Blob([], { type: 'audio/wav' });;
 
+
+
+
+
+
+
+
+
+
+
+
+
+/*                      TO DO
+
+
+https://stackoverflow.com/questions/46302362/record-audio-from-browser-and-visualize-in-real-time
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function startRecording() {
     console.log("recordButton clicked");
 
@@ -62,7 +99,6 @@ function getWavAudio(blob){
     RecordedAudio = blob;
     console.log(RecordedAudio);
 }
-
 
 // var module={};
 module.exports = {

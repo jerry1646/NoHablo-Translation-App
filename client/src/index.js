@@ -6,7 +6,7 @@ require("../styles/application.scss");
 // Render the top-level React component
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App.js';
-import Audio from './components/browser_audio/browser_audio.jsx'
+import App from './App.jsx';
+import Audio from './components/browser_audio/Audio.jsx'
 
-ReactDOM.render(<Audio/>, document.getElementById('react-root'));
+ReactDOM.render(<App/>, document.getElementById('react-root'));
