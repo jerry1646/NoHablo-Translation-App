@@ -11,6 +11,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@google-cloud/speech": "^2.1.1",
+    "@google-cloud/text-to-speech": "^0.3.0",
+    "@google-cloud/translate": "^2.1.2",
+    "binaryjs": "^0.2.1",
     "express": "^4.16.4"
   },
   "devDependencies": {
