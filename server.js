@@ -6,6 +6,13 @@ const app = express()
 
 const BinaryServer = require('binaryjs').BinaryServer;
 
+const translator = require('./lib/translator/test.js');
+
+
+
+
+
+
 const file_name = 'output1.wav' //also output.mp3
 const file_path = 'lib/translator/resources/' + file_name
 
