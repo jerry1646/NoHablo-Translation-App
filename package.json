@@ -14,8 +14,10 @@
     "@google-cloud/speech": "^2.1.1",
     "@google-cloud/text-to-speech": "^0.3.0",
     "@google-cloud/translate": "^2.1.2",
+    "audiobuffer-to-wav": "^1.0.0",
     "binaryjs": "^0.2.1",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "filereader": "^0.10.3"
   },
   "devDependencies": {
     "nodemon": "^1.18.6"

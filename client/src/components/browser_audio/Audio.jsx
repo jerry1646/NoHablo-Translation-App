@@ -86,26 +86,34 @@ class Audio extends Component {
     this.gumStream.getAudioTracks()[0].stop();
 
     //create the wav blob and save blob data to RecordAudio
-    this.rec.exportWAV(this.getWavAudio);
+    this.rec.exportWAV(this.getWavAudio)
 
     /*
         create the client socket and send RecordedAudio to server
         and
         after successfully send, active  start button
     */
-    var host = 'ws:localhost:5000/binary-endpoint';
-    var client = new BinaryClient(host);
-    setTimeout(function(){ client.send(this.RecordedAudio); }, 3000);
-
-
-
-
-
+    // var host = 'ws://localhost:5000/binary-endpoint';
+    // var client = new BinaryClient(host);
+    // console.log(this.RecordedAudio);
+    // setTimeout(function(){ client.send(this.RecordedAudio); }, 3000);
 
   }
 // call back function for exportWAV method in recorder.js
   getWavAudio=(blob)=>{
     this.RecordedAudio = blob;
+    console.log(blob);
+    console.log(this.RecordedAudio);
+    var host = 'ws://localhost:5000/binary-endpoint';
+    var client = new BinaryClient(host);
+    setTimeout(()=>{
+      // let stream = client.createStream();
+    // client.send(this.RecordedAudio); }, 3000);
+    client.send(this.RecordedAudio);
+    console.log(this.RecordedAudio);
+    }, 3000);
+
+
   }
 }
 

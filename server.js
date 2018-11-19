@@ -1,13 +1,19 @@
+const util = require('util')
 const fs = require('fs');
+var FileReader = require('filereader') , fileReader = new FileReader()
+  ;
 
-//
 const express = require('express')
 const app = express()
 
 const BinaryServer = require('binaryjs').BinaryServer;
 
-const file_name = 'output1.wav' //also output.mp3
-const file_path = 'lib/translator/resources/' + file_name
+// const file_name = 'output1.wav' //also output.mp3
+// const file_path = 'lib/translator/resources/' + file_name
+
+const file_name = 'BrowserAudio.wav' //also output.mp3
+const file_path = './' + file_name
+
 
 app.get('/api/users', (req, res) => {
   const users = [
@@ -32,26 +38,33 @@ const binaryServer = new BinaryServer({server: server, path: '/binary-endpoint'}
 binaryServer.on('connection', client => {
   console.log("binaryServer connection established");
 
-  client.on('stream',data =>{
-    console.log('this is the server receiving blob data', data);
+  client.on('stream',stream =>{
+
+    stream.on('data', (data) => {
+      console.log(data);
+      // fileReader.onload = function() {
+      //   fs.writeFileSync('./test.wav', Buffer.from(new Uint8Array(this.result)));
+      // };
+      // fileReader.readAsArrayBuffer(data);
+
+    })
   })
 
+  let stream = fs.createReadStream(file_path);
 
-  // let stream = fs.createReadStream(file_path);
+  // LOOP OVER ALL CLIENTS AND BROADCAST TO ALL OTHER CLIENT (NOT THE STREAMING CLIENT)
+    for(let id in binaryServer.clients) {
+      if(binaryServer.clients.hasOwnProperty(id)) {
+        let otherClient = binaryServer.clients[id];
+        // let send = otherClient.createStream(meta);
+        let send = otherClient.createStream({data: 'audio', cake: 'vanilla'});
+        stream.pipe(send);
+      }
+    }
 
-  // // LOOP OVER ALL CLIENTS AND BROADCAST TO ALL OTHER CLIENT (NOT THE STREAMING CLIENT)
-  //   for(let id in binaryServer.clients) {
-  //     if(binaryServer.clients.hasOwnProperty(id)) {
-  //       let otherClient = binaryServer.clients[id];
-  //       // let send = otherClient.createStream(meta);
-  //       let send = otherClient.createStream({data: 'audio', cake: 'vanilla'});
-  //       stream.pipe(send);
-  //     }
-  //   }
-
-  //   stream.on('end', () => {
-  //     console.log("audio stream ended.")
-  //   });
+    stream.on('end', () => {
+      console.log("audio stream ended.")
+    });
 
 });
 
