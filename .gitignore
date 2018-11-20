@@ -2,7 +2,7 @@ node_modules
 npm-debug.log
 .DS_Store
 dist
-
+myVoice.wav
 ### google account ###
 ./lib/translator/google_account
 
