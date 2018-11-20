@@ -26,6 +26,7 @@ class Audio extends Component {
   componentDidMount(){
     this.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new AudioContext; //new audio context to help us recordß
+    // this.audioContext.sampleRate = 16000;
   }
 
 
@@ -110,10 +111,10 @@ class Audio extends Component {
     var host = 'ws://localhost:5000/binary-endpoint';
     var client = new BinaryClient(host);
     setTimeout(()=>{
-      // let stream = client.createStream();
+    // let stream = client.createStream();
     // client.send(this.RecordedAudio); }, 3000);
-    client.send(this.RecordedAudio);
-    console.log(this.RecordedAudio);
+      client.send(this.RecordedAudio);
+      console.log(this.RecordedAudio);
     }, 3000);
   }
 
