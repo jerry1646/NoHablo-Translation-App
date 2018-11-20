@@ -3,6 +3,8 @@ npm-debug.log
 .DS_Store
 dist
 myVoice.wav
+myVoiceTranslated.mp3
+
 ### google account ###
 ./lib/translator/google_account
 
