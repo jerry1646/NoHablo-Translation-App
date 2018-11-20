@@ -36,6 +36,8 @@ const server = app.listen(port, () => {
 const binaryServer = new BinaryServer({server: server, path: '/binary-endpoint'});
 
 
+languageGroups = {};
+
 //MANAGE CLIENT CONNECTIONS TO BINARY SERVER
 binaryServer.on('connection', client => {
   console.log("binaryServer connection established");
@@ -49,6 +51,7 @@ binaryServer.on('connection', client => {
 
     stream.on('end', () => {
       let bufferComplete = Buffer.concat(audioBuffer);
+
 
       //CREATE FILENAME FOR REFERENCE
       let audioFilename = './myVoice.wav'
