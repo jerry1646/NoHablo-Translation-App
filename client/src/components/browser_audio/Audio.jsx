@@ -21,12 +21,24 @@ class Audio extends Component {
     // this.stopRecording = this.stopRecording.bind(this);
     // this.getWavAudio = this.getWavAudio.bind(this);
 
+
+
+    /***************
+      Audio Display
+    ****************/
+    this.meter = null;
+    this.canvasContext = null;
+    this.WIDTH=500;
+    this.HEIGHT=50;
+    this.rafID = null;
+    this.createAudioMeter = this.createAudioMeter.bind(this)
+    this.volumeAudioProcess = this.volumeAudioProcess.bind(this)
   }
 
   componentDidMount(){
     this.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new AudioContext; //new audio context to help us recordß
-    // this.audioContext.sampleRate = 16000;
+
   }
 
 
@@ -35,11 +47,10 @@ class Audio extends Component {
   render(){
     return (
       <div>
-        <div id="viz">
-          <canvas id="analyser" width="256" height="125"></canvas>
-        </div>
+        <canvas id="meter" width="600" height="40"></canvas>
         <button onClick= {this.startRecording} id="recordButton">Record</button>
         <button onClick= {this.stopRecording} id="stopButton" >Stop</button>
+
 {/*        <h3>Recordings</h3>
   <ol id="recordingsList"></ol>*/}
       </div>
@@ -49,31 +60,78 @@ class Audio extends Component {
   startRecording = ()=>{
     console.log("recordButton clicked in Audio file");
 
-    var constraints = { audio: true, video:false }
 
     recordButton.disabled = true;
     stopButton.disabled = false;
 
-    navigator.mediaDevices.getUserMedia(constraints).then((stream)=>{
-        console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
 
-        /* assign to gumStream for later use */
-        this.gumStream = stream;
-         // use the stream
-        this.input = this.audioContext.createMediaStreamSource(stream);
-        //numChannels:1 mono recording
-        this.rec = new Recorder(this.input,{numChannels:1})
-        //start the recording process
-        this.rec.record()
-        console.log("Recording started");
 
-    }).catch(function(err) {
+    // var constraints = { audio: true, video:false }
+  //   navigator.mediaDevices.getUserMedia(constraints).then((stream)=>{
+  //       console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
+
+  //       /* assign to gumStream for later use */
+  //       this.gumStream = stream;
+  //        // use the stream
+  //       this.input = this.audioContext.createMediaStreamSource(stream);
+  //       //numChannels:1 mono recording
+  //       this.rec = new Recorder(this.input,{numChannels:1})
+  //       //start the recording process
+  //       this.rec.record()
+  //       console.log("Recording started");
+
+  //   }).catch(function(err) {
+  //       //enable the record button if getUserMedia() fails
+  //       console.log(err);
+  //       recordButton.disabled = false;
+  //       stopButton.disabled = true;
+  //   });
+  // }
+
+
+var DisPlayconstrains = {"audio": {"mandatory": {"googEchoCancellation": "false",
+                                 "googAutoGainControl": "false",
+                                 "googNoiseSuppression": "false",
+                                 "googHighpassFilter": "false"}, "optional": []},
+        }
+
+navigator.mediaDevices.getUserMedia(DisPlayconstrains).then((stream)=>{
+
+
+  console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
+  /* assign to gumStream for later use */
+  this.gumStream = stream;
+   // use the stream
+  this.input = this.audioContext.createMediaStreamSource(stream);
+  //numChannels:1 mono recording
+  this.rec = new Recorder(this.input,{numChannels:1})
+  //start the recording process
+  this.rec.record()
+
+  console.log("Recording started");
+
+
+/************************
+      For Display Audio
+*/
+  this.gotStream(stream);
+
+
+
+}).catch(function(err) {
         //enable the record button if getUserMedia() fails
         console.log(err);
         recordButton.disabled = false;
         stopButton.disabled = true;
     });
-  }
+
+
+
+
+}
+
+
+
 
   stopRecording = ()=> {
     console.log("stopButton clicked");
@@ -142,7 +200,93 @@ class Audio extends Component {
 //     recordingsList.appendChild(li);
 // }
 
+createAudioMeter(audioContext,clipLevel,averaging,clipLag){
+  var processor = audioContext.createScriptProcessor(512);
+  processor.onaudioprocess = this.volumeAudioProcess;
+  processor.clipping = false;
+  processor.lastClip = 0;
+  processor.volume = 0;
+  processor.clipLevel = clipLevel || 0.98;
+  processor.averaging = averaging || 0.95;
+  processor.clipLag = clipLag || 750;
 
+  // this will have no effect, since we don't copy the input to the output,
+  // but works around a current Chrome bug.
+  processor.connect(audioContext.destination);
+
+  processor.checkClipping =
+    function(){
+      if (!this.clipping)
+        return false;
+      if ((this.lastClip + this.clipLag) < window.performance.now())
+        this.clipping = false;
+      return this.clipping;
+    };
+
+  processor.shutdown =
+    function(){
+      this.disconnect();
+      this.onaudioprocess = null;
+    };
+
+  return processor;
+}
+
+  volumeAudioProcess( event ){
+    var buf = event.inputBuffer.getChannelData(0);
+      var bufLength = buf.length;
+    var sum = 0;
+      var x;
+
+    // Do a root-mean-square on the samples: sum up the squares...
+      for (var i=0; i<bufLength; i++) {
+        x = buf[i];
+        if (Math.abs(x)>=this.meter.clipLevel) {
+          this.meter.clipping = true;
+          this.meter.lastClip = window.performance.now();
+        }
+        sum += x * x;
+      }
+
+      // ... then take the square root of the sum.
+      var rms =  Math.sqrt(sum / bufLength);
+
+      // Now smooth this out with the averaging factor applied
+      // to the previous sample - take the max here because we
+      // want "fast attack, slow release."
+      this.meter.volume = Math.max(rms, this.meter.volume*this.meter.averaging);
+  }
+
+
+  gotStream=(stream)=>{
+        // Create an AudioNode from the stream.
+        // mediaStreamSource = this.audioContext.createMediaStreamSource(stream);
+
+        // Create a new volume meter and connect it.
+        this.meter = this.createAudioMeter(this.audioContext);
+        this.input.connect(this.meter);
+
+        // kick off the visual updating
+        this.drawLoop();
+    }
+
+  drawLoop=( time )=>{
+      console.log('in draw loop');
+        // clear the background
+        this.canvasContext = meter.getContext("2d");
+        this.canvasContext.clearRect(0,0,this.WIDTH,this.HEIGHT);
+
+        // check if we're currently clipping
+        if (this.meter.checkClipping())
+            this.canvasContext.fillStyle = "red";
+        else
+            this.canvasContext.fillStyle = "green";
+
+        // draw a bar based on the current volume
+        this.canvasContext.fillRect(0, 0, this.meter.volume*this.WIDTH*1.4, this.HEIGHT);
+        // set up the next visual callback
+        this.rafID = window.requestAnimationFrame( this.drawLoop );
+    }
 }
 
 export default Audio
