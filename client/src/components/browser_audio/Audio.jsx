@@ -39,6 +39,8 @@ class Audio extends Component {
         </div>
         <button onClick= {this.startRecording} id="recordButton">Record</button>
         <button onClick= {this.stopRecording} id="stopButton" >Stop</button>
+{/*        <h3>Recordings</h3>
+  <ol id="recordingsList"></ol>*/}
       </div>
     )
   }
@@ -88,6 +90,7 @@ class Audio extends Component {
     //create the wav blob and save blob data to RecordAudio
     this.rec.exportWAV(this.getWavAudio)
 
+
     /*
         create the client socket and send RecordedAudio to server
         and
@@ -112,9 +115,33 @@ class Audio extends Component {
     client.send(this.RecordedAudio);
     console.log(this.RecordedAudio);
     }, 3000);
-
-
   }
+
+//   createDownloadLink(blob) {
+
+//     var url = URL.createObjectURL(blob);
+//     var au = document.createElement('audio');
+//     var li = document.createElement('li');
+//     var link = document.createElement('a');
+
+//     //add controls to the <audio> element
+//     au.controls = true;
+//     au.src = url;
+
+//     //link the a element to the blob
+//     link.href = url;
+//     link.download = new Date().toISOString() + '.wav';
+//     link.innerHTML = link.download;
+
+//     //add the new audio and a elements to the li element
+//     li.appendChild(au);
+//     li.appendChild(link);
+
+//     //add the li element to the ordered list
+//     recordingsList.appendChild(li);
+// }
+
+
 }
 
 export default Audio
