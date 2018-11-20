@@ -36,6 +36,8 @@ const server = app.listen(port, () => {
 const binaryServer = new BinaryServer({server: server, path: '/binary-endpoint'});
 
 
+languageGroups = {};
+
 //MANAGE CLIENT CONNECTIONS TO BINARY SERVER
 binaryServer.on('connection', client => {
   console.log("binaryServer connection established");
