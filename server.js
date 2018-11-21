@@ -101,8 +101,6 @@ binaryServer.on('connection', client => {
   })
 });
 
-      //CREATE FILENAME FOR REFERENCE
-      let audioFilename = './myVoice.wav'
 
 // translator(bufferComplete)
   // .catch((err) => { console.log('ERROR:', err) })
