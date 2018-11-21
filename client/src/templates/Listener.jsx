@@ -10,7 +10,6 @@ class Listener extends Component {
      return (
        <div>
          <h1>Hi There, you are the listener, be quiet</h1>
-
          <AudioPlayer/>
        </div>
      )
