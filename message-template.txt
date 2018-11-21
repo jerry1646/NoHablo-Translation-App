@@ -1,7 +1,6 @@
 {
   type: create-room,
   content: {
-    text: chatText,
     name: name,
     language: language
   }
@@ -16,11 +15,21 @@
   }
 }
 
+--> socket id added to client object before adding to chatroom
+
 {
   type: message,
   content: {
     text: chatText,
     name: name,
     language: language
+  }
+}
+
+
+{
+  type: 'notification',
+  content: {
+    text: "Room invalid."
   }
 }
