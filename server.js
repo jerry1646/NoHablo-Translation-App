@@ -49,15 +49,15 @@ function sendMsg(bs, language, data) {
 
 //MANAGE CLIENT CONNECTIONS TO BINARY SERVER
 languageGroups = {};
-// rooms = {};
+rooms = {};
 roomMsgBuffer = [];
 
 binaryServer.on('connection', client => {
   console.log(`BinaryServer connection established: ${client.id}`);
 
-  let audioBuffer = []
-
   client.on('stream', stream =>{
+
+    let audioBuffer = []
 
     //PROCESS RECEPTION OF STREAM DATA AS EITHER AUDIO BUFFERS OR STRING MESSAGES
     stream.on('data', data => {

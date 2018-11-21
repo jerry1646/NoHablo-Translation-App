@@ -1,7 +1,6 @@
 {
   type: create-room,
   content: {
-    text: chatText,
     name: name,
     language: language
   }
@@ -15,6 +14,8 @@
     roomPin: pin
   }
 }
+
+--> socket id added to client object before adding to chatroom
 
 {
   type: message,
