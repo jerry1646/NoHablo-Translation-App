@@ -1,14 +1,18 @@
-const util = require('util')
-const fs = require('fs');
-// var FileReader = require('filereader') , fileReader = new FileReader()
-//   ;
+// const util = require('util')
+// const fs = require('fs');
 
+//Create simple express server
 const express = require('express')
 const app = express()
 
+//Binary server = abstraction layer on top of socket.io to facilitate sending/receiving binary data.
 const BinaryServer = require('binaryjs').BinaryServer;
 
-const translator = require('./lib/translator/test.js');
+// const translator = require('./lib/translator/test.js');
+// const translator = require('./lib/translator/test_buffer.js');
+
+//IMPORT CHATROOM CLASS
+const Chatroom = require('./lib/chatroom.js');
 
 
 const file_name = 'BrowserAudio.wav' //also output.mp3
@@ -35,90 +39,101 @@ const server = app.listen(port, () => {
 //BINARY SERVER INITIALIZATION
 const binaryServer = new BinaryServer({server: server, path: '/binary-endpoint'});
 
-
-languageGroups = {};
-
 //MANAGE CLIENT CONNECTIONS TO BINARY SERVER
-binaryServer.on('connection', client => {
-  console.log("binaryServer connection established");
+rooms = {};
 
-  let audioBuffer = []
+function checkRoomId(roomPin) {
+ return rooms.hasOwnProperty(roomPin);
+}
+
+currentRoomId = 0;
+
+binaryServer.on('connection', client => {
+  console.log(`BinaryServer connection established: ${client.id}`);
 
   client.on('stream', stream =>{
+    console.log(`Receiving stream from client: ${client.id}`);
+    let audioBuffer = []
+
+    //PROCESS RECEPTION OF STREAM DATA AS EITHER AUDIO BUFFERS OR STRING MESSAGES
     stream.on('data', data => {
-      audioBuffer.push(data)
-    })
 
-    stream.on('end', () => {
-      let bufferComplete = Buffer.concat(audioBuffer);
+      if(Buffer.isBuffer(data)){
 
+        audioBuffer.push(data)
 
-      //CREATE FILENAME FOR REFERENCE
-      let audioFilename = './myVoice.wav'
+      } else {
 
-      fs.writeFile(audioFilename, bufferComplete, err => {
-        if (err) {
-          console.error('ERROR:', err);
-          return;
-        }
-        console.log('Audio content written to file');
+        let msg = JSON.parse(data);
+        switch(msg.type) {
 
-        //WHEN FILE IS WRITTEN WE CAN PROCESS IT
-        console.log(translator)
-
-        translator(audioFilename)
-          .catch((err) => { console.log('ERROR:', err) })
-          .then(data => {
-            translator.done = true;
-            translator.data = data;
-
-            //CREATE FILENAME FOR REFERENCE
-            let audioFilenameTranslated = './myVoiceTranslated.mp3'
-
-
-            fs.writeFile(audioFilenameTranslated, data, 'binary', err => {
-              if (err) {
-                console.error('ERROR:', err);
-                return;
-              }
-              console.log('Audio content written to file');
-
-              let stream = fs.createReadStream(audioFilename);
-
-              for(let id in binaryServer.clients) {
-                if(binaryServer.clients.hasOwnProperty(id)) {
-                  let otherClient = binaryServer.clients[id];
-                  // // let send = otherClient.createStream(meta);
-                  // let send = otherClient.createStream({data: 'audio'});
-                  // stream.pipe(send);
-                  otherClient.send(data)
-                }
+          case 'create-room':
+            rooms[currentRoomId] = new Chatroom(currentRoomId, client.id, msg.content.language, binaryServer.clients);
+            console.log(`Created a new room with id: ${currentRoomId}`)
+            //Send room information to client to be shared
+            let response = JSON.stringify({
+              type: 'notification',
+              content: {
+                text: 'Room created successfully',
+                id: currentRoomId
               }
             });
-          });
+            client.send(response);
+            currentRoomId++;
+            break;
 
-      });
-      console.log("audio stream ended...")
+          case 'registration':
+            msg.content['id'] = client.id;
+
+            //CHECK IF ROOM IS VALID
+            if(!checkRoomId(msg.content.roomPin)) {
+              let response = JSON.stringify({
+                type: 'error',
+                content: {
+                  text: "Room invalid."
+                }
+              });
+              client.send(response);
+              console.log(`Client id:${msg.content.id} name:${msg.content.name} submitted invalid roomPin:${msg.content.roomPin}`);
+            } else {
+              rooms[msg.content.roomPin].addClient(msg.content)
+              console.log(`Added client id:${msg.content.id} name:${msg.content.name} to Room id:${msg.content.roomPin}`)
+            }
+            break;
+
+          case 'message':
+            console.log("I got a message!");
+            break;
+
+          default:
+            console.log("Something must have gone wrong in switch statement");
+            break;
+        }
+      }
+    });
+
+    //PROCESS END OF STREAM BY INITIATING TRANSLATION PIPELINE
+    stream.on('end', () => {
+      if(audioBuffer.length) {
+        let bufferComplete = Buffer.concat(audioBuffer);
+
+        let streamTargetRoom;
+        for(let room in rooms) {
+          if(room.getSpeaker == client.id) {
+            streamTargetRoom = room;
+          }
+        }
+
+        if(streamTargetRoom){
+          streamTargetRoom.addTask(bufferComplete);
+        } else {
+          console.log(`Trying to stream to undefined room`);
+        }
+
+        console.log("audio stream ended...");
+      }
     })
-
   })
-
-  // let stream = fs.createReadStream(file_path);
-
-  // // LOOP OVER ALL CLIENTS AND BROADCAST TO ALL OTHER CLIENT (NOT THE STREAMING CLIENT)
-  //   for(let id in binaryServer.clients) {
-  //     if(binaryServer.clients.hasOwnProperty(id)) {
-  //       let otherClient = binaryServer.clients[id];
-  //       // let send = otherClient.createStream(meta);
-  //       let send = otherClient.createStream({data: 'audio', cake: 'vanilla'});
-  //       stream.pipe(send);
-  //     }
-  //   }
-
-  //   stream.on('end', () => {
-  //     console.log("audio stream ended.")
-  //   });
-
 });
 
 
