@@ -1,0 +1,26 @@
+{
+  type: create-room,
+  content: {
+    text: chatText,
+    name: name,
+    language: language
+  }
+}
+
+{
+  type: registration,
+  content: {
+    name: name,
+    language: language,
+    roomPin: pin
+  }
+}
+
+{
+  type: message,
+  content: {
+    text: chatText,
+    name: name,
+    language: language
+  }
+}

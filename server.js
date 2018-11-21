@@ -8,7 +8,8 @@ const app = express()
 
 const BinaryServer = require('binaryjs').BinaryServer;
 
-const translator = require('./lib/translator/test.js');
+// const translator = require('./lib/translator/test.js');
+const translator = require('./lib/translator/test_buffer.js');
 
 
 const file_name = 'BrowserAudio.wav' //also output.mp3
@@ -36,88 +37,92 @@ const server = app.listen(port, () => {
 const binaryServer = new BinaryServer({server: server, path: '/binary-endpoint'});
 
 
-languageGroups = {};
+//HELPER FUNCTION FOR SENDING DATA TO PARTICULAR LANGUAGE GROUP
+function sendMsg(bs, language, data) {
+  for(let id in binaryServer.clients) {
+    if(bs.clients.hasOwnProperty(id)) {
+      let otherClient = bs.clients[id];
+      otherClient.send(data)
+    }
+  }
+}
+
+
 
 //MANAGE CLIENT CONNECTIONS TO BINARY SERVER
+languageGroups = {};
+// rooms = {};
+roomMsgBuffer = [];
+
 binaryServer.on('connection', client => {
-  console.log("binaryServer connection established");
+  console.log(`BinaryServer connection established: ${client.id}`);
 
   let audioBuffer = []
 
   client.on('stream', stream =>{
+
+    //PROCESS RECEPTION OF STREAM DATA AS EITHER AUDIO BUFFERS OR STRING MESSAGES
     stream.on('data', data => {
-      audioBuffer.push(data)
-    })
 
-    stream.on('end', () => {
-      let bufferComplete = Buffer.concat(audioBuffer);
-
-      //CREATE FILENAME FOR REFERENCE
-      let audioFilename = './myVoice.wav'
-
-      fs.writeFile(audioFilename, bufferComplete, err => {
-        if (err) {
-          console.error('ERROR:', err);
-          return;
+      if(Buffer.isBuffer(data)){
+        audioBuffer.push(data)
+      } else {
+        let msg = JSON.parse(data);
+        switch(msg.type) {
+          case 'create-room':
+            console.log("Created a new room!")
+            break;
+          case 'registration':
+            // SHOULD HAVE TO CHECK IF ROOM IS VALID
+            // checkRoomId(msg.content.roomPin)
+            msg.content['id'] = client.id;
+            if(!languageGroups[msg.language]){
+              languageGroups[msg.language] = [msg.content]
+            } else {
+              languageGroups[msg.language].push(msg.content)
+            }
+            break;
+          case 'message':
+            console.log("I got a message!");
+            break;
+          default:
+            console.log("Something must have gone wrong in switch statement");
+            break;
         }
-        console.log('Audio content written to file');
+      }
+    });
 
-        //WHEN FILE IS WRITTEN WE CAN PROCESS IT
-        console.log(translator)
-
-        translator(audioFilename)
-          .catch((err) => { console.log('ERROR:', err) })
-          .then(data => {
-            translator.done = true;
-            translator.data = data;
-
-            //CREATE FILENAME FOR REFERENCE
-            let audioFilenameTranslated = './myVoiceTranslated.mp3'
-
-
-            fs.writeFile(audioFilenameTranslated, data, 'binary', err => {
-              if (err) {
-                console.error('ERROR:', err);
-                return;
-              }
-              console.log('Audio content written to file');
-
-              let stream = fs.createReadStream(audioFilename);
-
-              for(let id in binaryServer.clients) {
-                if(binaryServer.clients.hasOwnProperty(id)) {
-                  let otherClient = binaryServer.clients[id];
-                  // // let send = otherClient.createStream(meta);
-                  // let send = otherClient.createStream({data: 'audio'});
-                  // stream.pipe(send);
-                  otherClient.send(data)
-                }
-              }
-            });
-          });
-
-      });
-      console.log("audio stream ended...")
+    //PROCESS END OF STREAM BY INITIATING TRANSLATION PIPELINE
+    stream.on('end', () => {
+      if(audioBuffer.length) {
+        let bufferComplete = Buffer.concat(audioBuffer);
+        roomMsgBuffer.push(bufferComplete);
+        console.log("audio stream ended...")
+      }
     })
-
   })
+});
 
-  // let stream = fs.createReadStream(file_path);
+while
 
-  // // LOOP OVER ALL CLIENTS AND BROADCAST TO ALL OTHER CLIENT (NOT THE STREAMING CLIENT)
+// translator(bufferComplete)
+  // .catch((err) => { console.log('ERROR:', err) })
+  // .then(data => {
+  //   translator.done = true;
+  //   translator.data = data;
+
+
+  //   let stream = fs.createReadStream(audioFilename);
+
   //   for(let id in binaryServer.clients) {
   //     if(binaryServer.clients.hasOwnProperty(id)) {
   //       let otherClient = binaryServer.clients[id];
-  //       // let send = otherClient.createStream(meta);
-  //       let send = otherClient.createStream({data: 'audio', cake: 'vanilla'});
-  //       stream.pipe(send);
+  //       // // let send = otherClient.createStream(meta);
+  //       // let send = otherClient.createStream({data: 'audio'});
+  //       // stream.pipe(send);
+  //       otherClient.send(data)
   //     }
   //   }
-
-  //   stream.on('end', () => {
-  //     console.log("audio stream ended.")
-  //   });
-
-});
+  // });
 
 
