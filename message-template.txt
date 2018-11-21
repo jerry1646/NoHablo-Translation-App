@@ -25,3 +25,11 @@
     language: language
   }
 }
+
+
+{
+  type: 'notification',
+  content: {
+    text: "Room invalid."
+  }
+}

@@ -1,15 +1,18 @@
-const util = require('util')
-const fs = require('fs');
-// var FileReader = require('filereader') , fileReader = new FileReader()
-//   ;
+// const util = require('util')
+// const fs = require('fs');
 
+//Create simple express server
 const express = require('express')
 const app = express()
 
+//Binary server = abstraction layer on top of socket.io to facilitate sending/receiving binary data.
 const BinaryServer = require('binaryjs').BinaryServer;
 
 // const translator = require('./lib/translator/test.js');
-const translator = require('./lib/translator/test_buffer.js');
+// const translator = require('./lib/translator/test_buffer.js');
+
+//IMPORT CHATROOM CLASS
+const Chatroom = require('./lib/chatroom.js');
 
 
 const file_name = 'BrowserAudio.wav' //also output.mp3
@@ -36,53 +39,72 @@ const server = app.listen(port, () => {
 //BINARY SERVER INITIALIZATION
 const binaryServer = new BinaryServer({server: server, path: '/binary-endpoint'});
 
+//MANAGE CLIENT CONNECTIONS TO BINARY SERVER
+rooms = {};
 
-//HELPER FUNCTION FOR SENDING DATA TO PARTICULAR LANGUAGE GROUP
-function sendMsg(bs, language, data) {
-  for(let id in binaryServer.clients) {
-    if(bs.clients.hasOwnProperty(id)) {
-      let otherClient = bs.clients[id];
-      otherClient.send(data)
-    }
-  }
+function checkRoomId(roomPin) {
+ return rooms.hasOwnProperty(roomPin);
 }
 
-//MANAGE CLIENT CONNECTIONS TO BINARY SERVER
-languageGroups = {};
-rooms = {};
-roomMsgBuffer = [];
+currentRoomId = 0;
 
 binaryServer.on('connection', client => {
   console.log(`BinaryServer connection established: ${client.id}`);
 
   client.on('stream', stream =>{
-
+    console.log(`Receiving stream from client: ${client.id}`);
     let audioBuffer = []
 
     //PROCESS RECEPTION OF STREAM DATA AS EITHER AUDIO BUFFERS OR STRING MESSAGES
     stream.on('data', data => {
 
       if(Buffer.isBuffer(data)){
+
         audioBuffer.push(data)
+
       } else {
+
         let msg = JSON.parse(data);
         switch(msg.type) {
+
           case 'create-room':
-            console.log("Created a new room!")
+            rooms[currentRoomId] = new Chatroom(currentRoomId, client.id, msg.content.language, binaryServer.clients);
+            console.log(`Created a new room with id: ${currentRoomId}`)
+            //Send room information to client to be shared
+            let response = JSON.stringify({
+              type: 'notification',
+              content: {
+                text: 'Room created successfully',
+                id: currentRoomId
+              }
+            });
+            client.send(response);
+            currentRoomId++;
             break;
+
           case 'registration':
-            // SHOULD HAVE TO CHECK IF ROOM IS VALID
-            // checkRoomId(msg.content.roomPin)
             msg.content['id'] = client.id;
-            if(!languageGroups[msg.language]){
-              languageGroups[msg.language] = [msg.content]
+
+            //CHECK IF ROOM IS VALID
+            if(!checkRoomId(msg.content.roomPin)) {
+              let response = JSON.stringify({
+                type: 'error',
+                content: {
+                  text: "Room invalid."
+                }
+              });
+              client.send(response);
+              console.log(`Client id:${msg.content.id} name:${msg.content.name} submitted invalid roomPin:${msg.content.roomPin}`);
             } else {
-              languageGroups[msg.language].push(msg.content)
+              rooms[msg.content.roomPin].addClient(msg.content)
+              console.log(`Added client id:${msg.content.id} name:${msg.content.name} to Room id:${msg.content.roomPin}`)
             }
             break;
+
           case 'message':
             console.log("I got a message!");
             break;
+
           default:
             console.log("Something must have gone wrong in switch statement");
             break;
@@ -94,32 +116,24 @@ binaryServer.on('connection', client => {
     stream.on('end', () => {
       if(audioBuffer.length) {
         let bufferComplete = Buffer.concat(audioBuffer);
-        roomMsgBuffer.push(bufferComplete);
-        console.log("audio stream ended...")
+
+        let streamTargetRoom;
+        for(let room in rooms) {
+          if(room.getSpeaker == client.id) {
+            streamTargetRoom = room;
+          }
+        }
+
+        if(streamTargetRoom){
+          streamTargetRoom.addTask(bufferComplete);
+        } else {
+          console.log(`Trying to stream to undefined room`);
+        }
+
+        console.log("audio stream ended...");
       }
     })
   })
 });
-
-
-// translator(bufferComplete)
-  // .catch((err) => { console.log('ERROR:', err) })
-  // .then(data => {
-  //   translator.done = true;
-  //   translator.data = data;
-
-
-  //   let stream = fs.createReadStream(audioFilename);
-
-  //   for(let id in binaryServer.clients) {
-  //     if(binaryServer.clients.hasOwnProperty(id)) {
-  //       let otherClient = binaryServer.clients[id];
-  //       // // let send = otherClient.createStream(meta);
-  //       // let send = otherClient.createStream({data: 'audio'});
-  //       // stream.pipe(send);
-  //       otherClient.send(data)
-  //     }
-  //   }
-  // });
 
 
