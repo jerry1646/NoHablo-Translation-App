@@ -75,7 +75,8 @@ binaryServer.on('connection', client => {
               type: 'notification',
               content: {
                 text: 'success',
-                id: currentRoomId
+                id: currentRoomId,
+                language: msg.content.language
               }
             });
             client.send(response);
@@ -101,7 +102,8 @@ binaryServer.on('connection', client => {
                 type: 'notification',
                 content: {
                   text: "success",
-                  id: msg.content.roomPin
+                  id: msg.content.roomPin,
+                  language: msg.content.language
                 }
               });
               client.send(response);
@@ -124,11 +126,12 @@ binaryServer.on('connection', client => {
     stream.on('end', () => {
       if(audioBuffer.length) {
         let bufferComplete = Buffer.concat(audioBuffer);
-
+        console.log(`-->SENDER: ${client.id}`)
         let streamTargetRoom;
-        for(let room in rooms) {
-          if(room.getSpeaker == client.id) {
-            streamTargetRoom = room;
+        for(let roomId in rooms) {
+          console.log(`-->ROOM-${roomId}: ${rooms[roomId].getRoomId()}`)
+          if(rooms[roomId].getSpeaker() === client.id) {
+            streamTargetRoom = rooms[roomId];
           }
         }
 
@@ -138,7 +141,7 @@ binaryServer.on('connection', client => {
           console.log(`Trying to stream to undefined room`);
         }
 
-        console.log("audio stream ended...");
+        console.log("speaker audio stream ended...");
       }
     })
   })

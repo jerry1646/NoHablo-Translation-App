@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 
-import Users from "./components/users/users";
 import AudioPlayer from "./components/audioPlayer/audioPlayer";
 import Audio from './components/browser_audio/Audio.jsx'
 import Welcome from './templates/Welcome.jsx'
@@ -45,7 +44,8 @@ class App extends Component {
     this.tx.changeRoomName = changeRoomName;
 
     //INITIALIZE WEBSOCKET
-    const host = 'ws://localhost:5000/binary-endpoint';
+    const host = 'ws://172.46.0.123:5000/binary-endpoint';
+    //'ws://localhost:5000/binary-endpoint';
     const ws = new BinaryClient(host);
     this.setState({ws})
   }

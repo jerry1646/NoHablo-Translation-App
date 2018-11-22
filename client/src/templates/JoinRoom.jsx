@@ -13,6 +13,8 @@ class JoinRoom extends React.Component{
 
   handleChange = event => {
     event.preventDefault();
+    event.persist();
+
     //change App.jsx state.view to <Speaker/>
     //generate random room id
     //add room name, room id and speaker language to App.jsx state
@@ -27,27 +29,36 @@ class JoinRoom extends React.Component{
     console.log(`Attempting registration to room ${event.target.roomId.value}`)
     this.props.parentStates.ws.send(JSON.stringify(msg));
 
-    this.props.parentStates.ws.on('stream', stream => {
-      console.log("Receiving response stream")
+    this.props.parentStates.ws.on('stream', this.handleStream);
+  }
 
-      //HANDLE INCOMING DATA
-      stream.on('data', data => {
-        if(!Buffer.isBuffer(data)) {
-          let msg = JSON.parse(data);
+  handleStream = stream => {
+    console.log("Receiving response stream")
 
-          if(msg.content.text === 'success') {
+    //HANDLE INCOMING DATA
+    stream.on('data', data => {
 
-            this.props.parentMethods.changeRoomID(msg.content.id);
-            this.props.parentMethods.changeRoomName('RoomSession'+msg.content.id);
-            this.props.parentMethods.changeLanguage(event.target.listenerLanguage.value);
-            this.props.parentMethods.changeView("Listener");
-          } else {
-            console.log(`Join room request denied - ${msg.content.type}: ${msg.content.text}`);
-          }
+      console.log(data)
+
+      if(!Buffer.isBuffer(data) && data) {
+        let msg = JSON.parse(data);
+
+        if(msg.content.text === 'success') {
+
+          this.props.parentMethods.changeRoomID(msg.content.id);
+          this.props.parentMethods.changeRoomName('RoomSession'+msg.content.id);
+          this.props.parentMethods.changeLanguage(msg.content.language);
+
+          this.props.parentStates.ws.removeAllListeners('stream');
+
+          this.props.parentMethods.changeView("Listener");
+
         } else {
-          console.log("Join room request returned buffer wtf?")
+          console.log(`Join room request denied - ${msg.content.type}: ${msg.content.text}`);
         }
-      });
+      } else {
+        console.log("Join room request returned buffer wtf?")
+      }
     });
   }
 

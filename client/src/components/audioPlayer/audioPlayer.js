@@ -24,6 +24,8 @@ class AudioPlayer extends Component {
       //HANDLE INCOMING DATA
       stream.on('data', data => {
 
+        console.log(`Audio player received data: ${data}`)
+
         var byteArray = data;
 
         var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
