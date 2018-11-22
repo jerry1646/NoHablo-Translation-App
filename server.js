@@ -74,7 +74,7 @@ binaryServer.on('connection', client => {
             let response = JSON.stringify({
               type: 'notification',
               content: {
-                text: 'Room created successfully',
+                text: 'success',
                 id: currentRoomId
               }
             });
@@ -97,6 +97,14 @@ binaryServer.on('connection', client => {
               console.log(`Client id:${msg.content.id} name:${msg.content.name} submitted invalid roomPin:${msg.content.roomPin}`);
             } else {
               rooms[msg.content.roomPin].addClient(msg.content)
+              let response = JSON.stringify({
+                type: 'notification',
+                content: {
+                  text: "success",
+                  id: msg.content.roomPin
+                }
+              });
+              client.send(response);
               console.log(`Added client id:${msg.content.id} name:${msg.content.name} to Room id:${msg.content.roomPin}`)
             }
             break;

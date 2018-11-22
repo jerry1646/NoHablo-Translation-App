@@ -1,25 +1,19 @@
 import React, {Component} from 'react';
 
-var host = 'ws:localhost:5000/binary-endpoint';
-
 class AudioPlayer extends Component {
+
   constructor(){
     super()
-    this.state = {
-      users: []
-    }
   }
 
   componentDidMount(){
-    console.log("fetching data..");
+    console.log("Mounted audio player.");
 
     var audioContext = window.AudioContext || window.webkitAudioContext;
-
-    var client = new BinaryClient(host);
     var soundController = {};
     soundController.speakerContext = new audioContext();
 
-    client.on('stream', stream => {
+    this.props.ws.on('stream', stream => {
       soundController.nextTime = 0;
       var init = false;
       var audioCache = [];
@@ -60,10 +54,10 @@ class AudioPlayer extends Component {
 
     });
 
-    soundController.playCache = function(cache) {
+    soundController.playCache = cache => {
       while(cache.length) {
-        var buffer = cache.shift();
-        var source = soundController.speakerContext.createBufferSource();
+        let buffer = cache.shift();
+        let source = soundController.speakerContext.createBufferSource();
         source.buffer = buffer;
         source.connect(soundController.speakerContext.destination);
 
