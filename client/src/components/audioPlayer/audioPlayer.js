@@ -18,7 +18,7 @@ class AudioPlayer extends Component {
       var init = false;
       var audioCache = [];
 
-      console.log("receiving audio stream")
+      console.log("receiving data stream")
 
 
       //HANDLE INCOMING DATA
