@@ -255,7 +255,6 @@ class Audio extends Component {
   }
 
   drawLoop = time =>{
-    console.log('in draw loop');
 
     // clear the background
     this.canvasContext = meter.getContext("2d");

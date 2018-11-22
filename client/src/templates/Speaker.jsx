@@ -3,6 +3,8 @@
 */
 import React, {Component} from 'react';
 import Audio from '../components/browser_audio/Audio.jsx'
+import TextMessages from '../components/textMessages/textMessages.js'
+
 
 class Speaker extends Component {
 
@@ -14,6 +16,8 @@ class Speaker extends Component {
          <h1>Room ID:{this.props.parentStates.room_id}</h1>
          <h1>Speaker Language:{this.props.parentStates.language}</h1>
          <Audio ws={this.props.parentStates.ws}/>
+         <TextMessages ws={this.props.parentStates.ws}/>
+
        </div>
      )
    }

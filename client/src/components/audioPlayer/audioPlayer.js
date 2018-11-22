@@ -18,40 +18,43 @@ class AudioPlayer extends Component {
       var init = false;
       var audioCache = [];
 
-      console.log("receiving audio stream")
+      console.log("receiving data stream")
 
 
       //HANDLE INCOMING DATA
       stream.on('data', data => {
 
         console.log(`Audio player received data: ${data}`)
+        if (data && data.byteLength){
+          var byteArray = data;
 
-        var byteArray = data;
-
-        var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        audioCtx.decodeAudioData(data, buffer => {
+          var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          audioCtx.decodeAudioData(data, buffer => {
 
 
-          console.log("adding buffer to audioCache")
-          audioCache.push(buffer);
+            console.log("adding buffer to audioCache")
+            audioCache.push(buffer);
 
-          if((init === true) || ((init === false) && (audioCache.length > 0))) {
-            init = true;
-            console.log("attempting to play audio cache")
-            soundController.playCache(audioCache);
-          }
-        });
+            if((init === true) || ((init === false) && (audioCache.length > 0))) {
+              init = true;
+              console.log("attempting to play audio cache")
+              soundController.playCache(audioCache);
+            }
+          });
 
-          // var source = audioCtx.createBufferSource();
-          // source.buffer = buffer;
-          // source.connect(audioCtx.destination);
-          // source.start();
+            // var source = audioCtx.createBufferSource();
+            // source.buffer = buffer;
+            // source.connect(audioCtx.destination);
+            // source.start();
 
+        } else{
+          console.log('Did not receive binary audio data')
+        }
       });
 
       //HANDLE STREAM CLOSING
       stream.on('end', () => {
-        console.log('end of audio stream...')
+        console.log('end of data stream...')
       });
 
     });
