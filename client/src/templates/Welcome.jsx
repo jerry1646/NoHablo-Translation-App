@@ -15,11 +15,13 @@ class Welcome extends React.Component{
   render(){
 
     return(
-      <div>
-        <h1>NoHablo</h1>
-        <img src='src/images/cloud.jpg'/>
-        <button onClick={this.getCreateRoomView} id="recordButton">Create Room</button>
-        <button onClick={this.getJoinRoomView} id="recordButton">Join Room</button>
+      <div className="mid">
+
+          <h1>NoHablo</h1>
+          {/*<img src='src/images/cloud.jpg'/>*/}
+          <button onClick={this.getCreateRoomView} id="recordButton">Create Room</button>
+          <button onClick={this.getJoinRoomView} id="recordButton">Join Room</button>
+
       </div>
     )
   }
