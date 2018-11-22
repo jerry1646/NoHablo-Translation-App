@@ -37,10 +37,12 @@ class CreateRoom extends React.Component{
 
       //HANDLE INCOMING DATA
       stream.on('data', data => {
+
         console.log("Receiving data")
-        if(!Buffer.isBuffer(data)) {
+
+        if(data && typeof(data) == 'string'){
           let msg = JSON.parse(data);
-          if(msg.content.text === 'success') {
+          if(msg.type === 'notification' && msg.content.text === 'success') {
 
             this.props.parentMethods.changeRoomID(msg.content.id);
             this.props.parentMethods.changeRoomName('RoomSession - '+msg.content.id);
@@ -53,7 +55,7 @@ class CreateRoom extends React.Component{
             console.log("Create room request denied - reason unknown")
           }
         } else {
-          console.log("Create room request returned buffer wtf?")
+          console.log("Expect response from server to be a stringified JSON")
         }
       });
   }

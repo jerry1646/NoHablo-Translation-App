@@ -17,7 +17,8 @@
     "audiobuffer-to-wav": "^1.0.0",
     "binaryjs": "^0.2.1",
     "express": "^4.16.4",
-    "filereader": "^0.10.3"
+    "filereader": "^0.10.3",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "nodemon": "^1.18.6"
