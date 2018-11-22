@@ -40,10 +40,10 @@ class JoinRoom extends React.Component{
 
       console.log(data)
 
-      if(!Buffer.isBuffer(data) && data) {
+      if(data && typeof(data) == 'string') {
         let msg = JSON.parse(data);
 
-        if(msg.content.text === 'success') {
+        if(msg.type === 'notification' && msg.content.text === 'success') {
 
           this.props.parentMethods.changeRoomID(msg.content.id);
           this.props.parentMethods.changeRoomName('RoomSession'+msg.content.id);
@@ -57,7 +57,7 @@ class JoinRoom extends React.Component{
           console.log(`Join room request denied - ${msg.content.type}: ${msg.content.text}`);
         }
       } else {
-        console.log("Join room request returned buffer wtf?")
+        console.log("Expect response from server to be a stringified JSON")
       }
     });
   }
