@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 
-import Users from "./components/users/users";
 import AudioPlayer from "./components/audioPlayer/audioPlayer";
 import Audio from './components/browser_audio/Audio.jsx'
 import Welcome from './templates/Welcome.jsx'
@@ -16,46 +15,53 @@ class App extends Component {
     super(props);
     this.state={
       view: "Welcome",
-      speaker_language: "",
+      language: "",
       room_id: "",
-      room_name: ""
+      room_name: "",
+      ws: ''
     }
     this.tx={};
+
   }
 
   componentDidMount(){
-    const changeView=(newView)=>{
+    const changeView = newView => {
       this.setState({view: newView})
     }
-    const changeSpeakerLanguage=(language)=>{
-      this.setState({speaker_language: language})
+    const changeLanguage = language => {
+      this.setState({ language })
     }
-    const changeRoomID=(id)=>{
+    const changeRoomID = id => {
       this.setState({room_id: id})
     }
-    const changeRoomName=(roomname)=>{
+    const changeRoomName = roomname => {
       this.setState({room_name: roomname})
     }
 
-    this.tx.changeView=changeView;
-    this.tx.changeSpeakerLanguage = changeSpeakerLanguage;
+    this.tx.changeView = changeView;
+    this.tx.changeLanguage = changeLanguage;
     this.tx.changeRoomID = changeRoomID;
     this.tx.changeRoomName = changeRoomName;
+
+    //INITIALIZE WEBSOCKET
+    const host = 'ws://172.46.0.123:5000/binary-endpoint';
+    //'ws://localhost:5000/binary-endpoint';
+    const ws = new BinaryClient(host);
+    this.setState({ws})
   }
 
   render() {
-    if(this.state.view==="Welcome")
-    {
+    if(this.state.view === "Welcome") {
       console.log(this.state.view);
       return <Welcome parentStates={this.state} parentMethods={this.tx}/>
-    }else if (this.state.view==="CreateRoom") {
+    } else if (this.state.view==="CreateRoom") {
       console.log(this.state.view);
       return <CreateRoom parentStates={this.state} parentMethods={this.tx}/>
-    }else if(this.state.view === "JoinRoom"){
+    } else if(this.state.view === "JoinRoom"){
       return <JoinRoom parentStates={this.state} parentMethods={this.tx}/>
-    }else if (this.state.view === "Speaker") {
+    } else if (this.state.view === "Speaker") {
       return <Speaker parentStates={this.state} parentMethods={this.tx}/>
-    }else if(this.state.view === "Listener"){
+    } else if(this.state.view === "Listener"){
       return <Listener parentStates={this.state} parentMethods={this.tx}/>
     }
 
