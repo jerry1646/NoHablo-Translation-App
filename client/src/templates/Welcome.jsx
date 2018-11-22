@@ -4,11 +4,11 @@ import React, {Component} from 'react';
 class Welcome extends React.Component{
 
 
-  getCreateRoomView=()=>{
+  getCreateRoomView = () => {
       this.props.parentMethods.changeView("CreateRoom");
     }
 
-  getJoinRoomView=()=>{
+  getJoinRoomView = () => {
     this.props.parentMethods.changeView("JoinRoom");
   }
 
@@ -16,10 +16,10 @@ class Welcome extends React.Component{
 
     return(
       <div>
-        <h1> NoHablo</h1>
+        <h1>NoHablo</h1>
         <img src='src/images/cloud.jpg'/>
-        <button onClick= {this.getCreateRoomView} id="recordButton">Create Room</button>
-        <button onClick= {this.getJoinRoomView} id="recordButton">Join Room</button>
+        <button onClick={this.getCreateRoomView} id="recordButton">Create Room</button>
+        <button onClick={this.getJoinRoomView} id="recordButton">Join Room</button>
       </div>
     )
   }

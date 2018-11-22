@@ -12,8 +12,8 @@ class Speaker extends Component {
          <h1>Hi There, you are the speaker, say something </h1>
          <h1>Room Name:{this.props.parentStates.room_name}</h1>
          <h1>Room ID:{this.props.parentStates.room_id}</h1>
-         <h1>Speaker Language:{this.props.parentStates.speaker_language}</h1>
-         <Audio/>
+         <h1>Speaker Language:{this.props.parentStates.language}</h1>
+         <Audio ws={this.props.parentStates.ws}/>
        </div>
      )
    }
