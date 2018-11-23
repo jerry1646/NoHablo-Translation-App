@@ -42,8 +42,8 @@ const binaryServer = new BinaryServer({server: server, path: '/binary-endpoint'}
 //MANAGE CLIENT CONNECTIONS TO BINARY SERVER
 rooms = {};
 
-function checkRoomId(roomPin) {
- return rooms.hasOwnProperty(roomPin);
+function checkRoomId(roomId) {
+ return rooms.hasOwnProperty(roomId);
 }
 
 currentRoomId = 0;
@@ -65,6 +65,7 @@ binaryServer.on('connection', client => {
       } else {
 
         let msg = JSON.parse(data);
+
         switch(msg.type) {
 
           case 'create-room':
@@ -87,7 +88,7 @@ binaryServer.on('connection', client => {
             msg.content['id'] = client.id;
 
             //CHECK IF ROOM IS VALID
-            if(!checkRoomId(msg.content.roomPin)) {
+            if(!checkRoomId(msg.content.roomId)) {
               let response = JSON.stringify({
                 type: 'error',
                 content: {
@@ -95,21 +96,25 @@ binaryServer.on('connection', client => {
                 }
               });
               client.send(response);
-              console.log(`Client id:${msg.content.id} name:${msg.content.name} submitted invalid roomPin:${msg.content.roomPin}`);
+              console.log(`Client id:${msg.content.id} name:${msg.content.name} submitted invalid roomId:${msg.content.roomId}`);
             } else {
-              rooms[msg.content.roomPin].addClient(msg.content)
+              rooms[msg.content.roomId].addClient(msg.content)
               let response = JSON.stringify({
                 type: 'notification',
                 content: {
                   text: "success",
-                  id: msg.content.roomPin,
+                  id: msg.content.roomId,
                   language: msg.content.language
                 }
               });
               client.send(response);
-              console.log(`Added client id:${msg.content.id} name:${msg.content.name} to Room id:${msg.content.roomPin}`)
+              console.log(`Added client id:${msg.content.id} name:${msg.content.name} to Room id:${msg.content.roomId}`)
             }
             break;
+          case 'shutdown':
+            rooms[msg.content.roomId] = undefined;
+            break;
+          case 'dropout':
 
           case 'message':
             console.log("I got a message!");
