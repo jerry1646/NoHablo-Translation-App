@@ -13,6 +13,7 @@ class Listener extends Component {
          <h1>Hi There, you are the listener, be quiet</h1>
 
          <AudioPlayer ws={this.props.parentStates.ws}/>
+         <TextMessages ws={this.props.parentStates.ws}/>
 
        </div>
      )
