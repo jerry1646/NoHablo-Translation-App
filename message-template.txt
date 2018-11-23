@@ -11,11 +11,32 @@
   content: {
     name: name,
     language: language,
-    roomPin: pin
+    roomId: pin
   }
+  Notes:
+  --> socket id added to client object before adding to chatroom
 }
 
---> socket id added to client object before adding to chatroom
+{
+  type: speakerdisconnected,
+  content: {
+    roomId: id,
+  }
+  Notes:
+  -->sent to clients after speaker shutsdown room
+}
+
+
+{
+  type: dropout,
+  content: {
+    roomId: id,
+  }
+
+  Notes:
+  --> socket id added to client object before adding to chatroom
+}
+
 
 {
   type: message,
