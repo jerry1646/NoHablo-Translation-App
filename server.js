@@ -111,11 +111,6 @@ binaryServer.on('connection', client => {
               console.log(`Added client id:${msg.content.id} name:${msg.content.name} to Room id:${msg.content.roomId}`)
             }
             break;
-          case 'shutdown':
-            rooms[msg.content.roomId] = undefined;
-            break;
-          case 'dropout':
-
           case 'message':
             console.log("I got a message!");
             break;
@@ -148,8 +143,26 @@ binaryServer.on('connection', client => {
 
         console.log("speaker audio stream ended...");
       }
-    })
-  })
+    });
+
+  });
+
+  client.on('disconnect', () => {
+    for(let id in rooms){
+      if(rooms[id].getSpeaker() === client.id) {
+        let msg = {
+          type: 'notification',
+          content: {
+            text: 'room-closed'
+            info: 'Speaker has left the room'
+          }
+        }
+        rooms[id].broadcastMessage(msg);
+        rooms[id] = null;
+      }
+    }
+  });
+
 });
 
 

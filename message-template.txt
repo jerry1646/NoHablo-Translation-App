@@ -18,15 +18,6 @@
 }
 
 {
-  type: shutdown,
-  content: {
-    roomId: id,
-  }
-  Notes:
-  -->client id compared to speaker id before accepting shutdown
-}
-
-{
   type: speakerdisconnected,
   content: {
     roomId: id,

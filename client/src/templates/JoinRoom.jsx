@@ -23,7 +23,7 @@ class JoinRoom extends React.Component{
       content: {
         name: event.target.name.value,
         language: event.target.listenerLanguage.value,
-        roomPin: event.target.roomId.value
+        roomId: event.target.roomId.value
       }
     }
     console.log(`Attempting registration to room ${event.target.roomId.value}`)
