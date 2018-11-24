@@ -1,3 +1,7 @@
 // This is the top-level scss file. Import all other files in here.
+html, body, #react-root {
+  height: 100%;
+  margin: 0;
+}
 @import 'home';
 @import 'forms';

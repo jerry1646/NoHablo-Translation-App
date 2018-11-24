@@ -1,38 +1,51 @@
-#join-room {
-  background-image: url('http://www.visitgreece.gr/deployedFiles/StaticFiles/Photos/Generic%20Contents/Forests/mountains_2_560.jpg');
+#join-room, #create-room {
+  background-image: url('https://images.unsplash.com/photo-1477346611705-65d1883cee1e?dpr=0.800000011920929&auto=format&fit=crop&w=1199&h=800&q=80&cs=tinysrgb&crop=');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
   width: 100%;
   height: 100%;
-  font-family: 'Comfortaa', cursive;
+  /*font-family: 'Comfortaa', cursive;*/
+  font-family: 'Fredoka One', cursive;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: #df2359;
 }
 
 .blurred-box {
   z-index: 0;
+  width: 25vw;
+  min-width:290px;
+  max-width: 320px;
   position: relative;
-  width: 40%;
-  height: 100%;
   top: 0;
   left: 0;
   background: inherit;
   overflow: hidden;
   margin: auto;
+  border-radius: 10px;
 }
 
 .blurred-box:after {
   z-index: -1;
   content: '';
-  width: 100%;
-  height: 100%;
   background: inherit;
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  box-shadow: inset 0 0 0 2000px rgba(255, 255, 255, 0.2);
+  left: -25px;
+  right: -25px;
+  top: -25px;
+  bottom: -25px;
+  box-shadow: inset 0 0 0 500px rgba(255,255,255,0.2);
   filter: blur(10px);
 }
 
@@ -59,11 +72,6 @@
   align-items: center;
 }
 
-label {
-  font-size: 2rem;
-
-}
-
 input {
   background: 0;
   width: 200px;
@@ -72,12 +80,17 @@ input {
   border-bottom: 2px solid rgba(255,255,255, 0.3);
   margin: 20px 0;
   padding-bottom: 10px;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: bold;
   color: rgba(255,255,255, 0.8);
 }
 
-input[type="submit"]{
+input::placeholder {
+  color: white;
+  font-family: 'Fredoka One', cursive;
+}
+
+input[type="submit"] {
   border: 0;
   border-radius: 8px;
   padding-bottom: 0;
@@ -87,3 +100,31 @@ input[type="submit"]{
   cursor: pointer;
   transition: all 600ms ease-in-out;
 }
+
+input[type="submit"]:hover {
+  background-color: grey
+}
+
+#language-list {
+  background: 0;
+  width: 200px;
+
+  border: 0;
+  -webkit-border-radius: 0;
+
+  margin: 20px 0;
+  padding-bottom: 10px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+#go-back-button {
+  background: 0;
+  border: 0;
+  border-bottom: 2px solid rgba(255,255,255, 0.3);
+  color: white;
+  margin: 0px 10px 10px 10px;
+}
+
