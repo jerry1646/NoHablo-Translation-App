@@ -24,13 +24,23 @@ class TextMessages extends Component {
 
         console.log(`Text message handler received data: ${data}`)
         if(data && typeof(data) == 'string'){
+
           let msg = JSON.parse(data);
           if(msg.type === 'message' && msg.content.inText){
             const oldMessageList = this.state.messageList;
             const newMessageList = [...oldMessageList, msg.content];
             this.setState({messageList: newMessageList})
             console.log(this.state.messageList)
-          } else{
+
+          } else if(msg.type === 'notification' && msg.content.info) {
+
+            //****************************************
+            //*         EDIT HERE JERRY PLZ          *
+            //****************************************
+
+            console.log(msg.content.info)
+            this.props.parentStates.ws.removeAllListeners('stream');
+          } else {
             console.log('expect message to be type "message" or content is empty')
           }
 
