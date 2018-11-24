@@ -153,7 +153,7 @@ binaryServer.on('connection', client => {
         let msg = {
           type: 'notification',
           content: {
-            text: 'room-closed'
+            text: 'room-closed',
             info: 'Speaker has left the room'
           }
         }
