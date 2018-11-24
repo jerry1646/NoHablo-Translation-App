@@ -64,17 +64,21 @@ class JoinRoom extends React.Component{
 
   render(){
     return(
-      <div>
+      <div id='join-room'>
         <h1> Join an existing room!</h1>
-          <form onSubmit={this.handleChange}>
-            <label>Name:</label>
-            <input type="text" name="name" />
-            <label>PIN:</label>
-            <input type="text" name="roomId" />
-            <label>Language:</label>
-            <input type="text" name="listenerLanguage" />
-            <input type="submit" value="Submit" />
-          </form>
+          <div className="blurred-box">
+            <div className="user-info-box">
+              <form onSubmit={this.handleChange} className="user-info-form">
+                <label>Name:</label>
+                <input type="text" name="name" />
+                <label>PIN:</label>
+                <input type="text" name="roomId" />
+                <label>Language:</label>
+                <input type="text" name="listenerLanguage" />
+                <input type="submit" value="Submit" />
+              </form>
+            </div>
+          </div>
         <button onClick= {this.backToWelcome} id="GoBack">Back</button>
       </div>
     )
