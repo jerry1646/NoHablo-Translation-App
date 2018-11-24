@@ -1,28 +1,31 @@
 import React, {Component} from 'react';
+// import {startRecording, stopRecording} from './helper.js'
+// import recorder from './recorder.js'
 
 class Audio extends Component {
 
   constructor(){
     super();
     this.state={
-      RecordedAudio: new Blob([], { type: 'audio/wav' }),
-      infoActive: false
+      RecordedAudio: new Blob([], { type: 'audio/wav' })
     }
 
-   /*************************
-      Audio Record Variables
-    **************************/
+    /*helper variables*/
     this.gumStream; //stream from getUserMedia()
     this.rec; //Recorder.js object
     this.input; //MediaStreamAudioSourceNode we'll be recording
+    // shim for AudioContext when it's not avb.
     this.AudioContext;
     this.audioContext; //new audio context to help us record
+    // this.startRecording = this.startRecording.bind(this);
+    // this.stopRecording = this.stopRecording.bind(this);
+    // this.getWavAudio = this.getWavAudio.bind(this);
 
 
 
-    /*************************
-      Audio Display Variables
-    **************************/
+    /***************
+      Audio Display
+    ****************/
     this.meter = null;
     this.canvasContext = null;
     this.WIDTH=500;
@@ -35,40 +38,17 @@ class Audio extends Component {
   componentDidMount() {
     this.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new AudioContext; //new audio context to help us recordß
+
   }
 
   render(){
     return (
       <div>
-        <div id='audio-visualizer'>
-          <canvas id="meter" width="600" height="40"></canvas>
-        </div>
-        <div className='bottom-bar'>
-          <div className='side-buttons'>
-            <div className={this.state.infoActive?'active-info side-button':'side-button'} id='room-info' onClick={this.toggleInfo}>i</div>
-          </div>
-          <div className='speaker-button record' onClick= {this.startRecording} id="recordButton">
-            <span>Record</span>
-          </div>
-          <div className='speaker-button stop' onClick= {this.stopRecording} id="stopButton">
-            <span>Stop</span>
-          </div>
-          <div className='side-buttons'>
-          </div>
-        </div>
+        <canvas id="meter" width="600" height="40"></canvas>
+        <button onClick= {this.startRecording} id="recordButton">Record</button>
+        <button onClick= {this.stopRecording} id="stopButton" >Stop</button>
       </div>
     )
-  }
-
-
-  //Private functions
-
-  toggleInfo = (e) => {
-    let currentState = this.state.active
-    this.props.methods.toggleInfo();
-    this.setState({
-      infoActive: !currentState
-    })
   }
 
   startRecording = () => {
@@ -77,6 +57,31 @@ class Audio extends Component {
 
     recordButton.disabled = true;
     stopButton.disabled = false;
+
+
+
+    // var constraints = { audio: true, video:false }
+    //   navigator.mediaDevices.getUserMedia(constraints).then((stream)=>{
+    //       console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
+
+    //       /* assign to gumStream for later use */
+    //       this.gumStream = stream;
+    //        // use the stream
+    //       this.input = this.audioContext.createMediaStreamSource(stream);
+    //       //numChannels:1 mono recording
+    //       this.rec = new Recorder(this.input,{numChannels:1})
+    //       //start the recording process
+    //       this.rec.record()
+    //       console.log("Recording started");
+
+    //   }).catch(function(err) {
+    //       //enable the record button if getUserMedia() fails
+    //       console.log(err);
+    //       recordButton.disabled = false;
+    //       stopButton.disabled = true;
+    //   });
+    // }
+
 
     var displayConstraints = {
       "audio": {
@@ -135,6 +140,17 @@ class Audio extends Component {
 
     //create the wav blob and save blob data to RecordAudio
     this.rec.exportWAV(this.getWavAudio)
+
+    /*
+        create the client socket and send RecordedAudio to server
+        and
+        after successfully send, active  start button
+    */
+    // var host = 'ws://localhost:5000/binary-endpoint';
+    // var client = new BinaryClient(host);
+    // console.log(this.RecordedAudio);
+    // setTimeout(function(){ client.send(this.RecordedAudio); }, 3000);
+
   }
 
 
@@ -145,6 +161,30 @@ class Audio extends Component {
     console.log(this.RecordedAudio);
     this.props.ws.send(this.RecordedAudio);
   }
+
+  // createDownloadLink(blob) {
+
+  //   var url = URL.createObjectURL(blob);
+  //   var au = document.createElement('audio');
+  //   var li = document.createElement('li');
+  //   var link = document.createElement('a');
+
+  //   //add controls to the <audio> element
+  //   au.controls = true;
+  //   au.src = url;
+
+  //   //link the a element to the blob
+  //   link.href = url;
+  //   link.download = new Date().toISOString() + '.wav';
+  //   link.innerHTML = link.download;
+
+  //   //add the new audio and a elements to the li element
+  //   li.appendChild(au);
+  //   li.appendChild(link);
+
+  //   //add the li element to the ordered list
+  //   recordingsList.appendChild(li);
+  // }
 
   createAudioMeter(audioContext,clipLevel,averaging,clipLag) {
     var processor = audioContext.createScriptProcessor(512);

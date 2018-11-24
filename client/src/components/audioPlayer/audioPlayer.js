@@ -4,6 +4,10 @@ class AudioPlayer extends Component {
 
   constructor(){
     super()
+
+    this.state={
+      infoActive:false
+    }
   }
 
   componentDidMount(){
@@ -80,8 +84,26 @@ class AudioPlayer extends Component {
   render(){
     return (
       <div>
+        <div className='bottom-bar'>
+          <div className='side-buttons'>
+          </div>
+          <div className='listener-visualizer' id='audio-visualizer'>
+            <canvas id="meter" width="600" height="40"></canvas>
+          </div>
+          <div className='side-buttons'>
+            <div className={this.state.active?'active-info side-button':'side-button'} id='room-info' onClick={this.toggleInfo}>i</div>
+          </div>
+        </div>
       </div>
     )
+  }
+
+  toggleInfo = (e) => {
+    let currentState = this.state.active
+    this.props.methods.toggleInfo();
+    this.setState({
+      infoActive: !currentState
+    })
   }
 
 }

@@ -1,0 +1,132 @@
+/*Shared stylings*/
+.chatroom{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  div{
+    border: 1px black solid;
+  }
+
+  nav{
+    border: 1px black solid;
+    height: 40px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    background-color: grey;
+    z-index: 1;
+  }
+
+  .message-container{
+    margin-top: 40px;
+    display: flex;
+    align-items: flex-end;
+    margin: 20px, 40px;
+    justify-content: space-between;
+    flex: 1;
+
+    .room-info-container{
+      display: inline-block;
+      flex-basis: 22%;
+      margin: 0 0 10px 40px;
+
+      .room-info{
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        border-radius: 10px;
+      }
+    }
+
+    .message-list{
+      flex-basis: 60%;
+
+      .messages{
+        .message-item{
+          display: flex;
+          justify-content: flex-end;
+          .message-bubble{
+            border: solid 2px aqua;
+            background-color: aqua;
+            margin: 0 40px 10px 0;
+            border-radius: 10px;
+            display: inline-block;
+            max-width: 80%;
+            padding: 8px 15px;
+            box-sizing: border-box;
+            color: #222;
+
+          }
+        }
+      }
+    }
+  }
+
+
+  .bottom-bar{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .side-buttons{
+    flex-basis: 20%;
+    .side-button{
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      background-color: grey;
+      color: white;
+      font-weight: 700;
+      margin: 0 auto;
+      padding: 10px 16px;
+      box-sizing: border-box;
+    }
+
+    .side-button:hover{
+      background-color: #aaa;
+      color: #222
+    }
+
+    .active-info{
+      background-color: #aaa;
+      color: #222
+    }
+  }
+
+  .speaker-button{
+    flex-basis: 15%;
+    height: 75%;
+    border-radius: 20px;
+    padding: 10px;
+    background-color: springgreen;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .speaker-button:hover{
+    font-weight: 700;
+    color: white;
+    background-color: darkgreen;
+  }
+
+}
+
+#audio-visualizer{
+  width: 100%;
+  height: 60px;
+}
+
+/*Speaker stylings*/
+
+#speaker-view{
+
+}
+
+#listener-view{
+
+  .listener-visualizer{
+    flex-basis: 30%;
+  }
+}
