@@ -13,24 +13,22 @@ class AudioPlayer extends Component {
     var soundController = {};
     soundController.speakerContext = new audioContext();
 
+    var audioCache = [];
+
     this.props.ws.on('stream', stream => {
       soundController.nextTime = 0;
       var init = false;
-      var audioCache = [];
 
       console.log("receiving data stream")
 
 
       //HANDLE INCOMING DATA
       stream.on('data', data => {
-
         console.log(`Audio player received data: ${data}`)
         if (data && data.byteLength){
           var byteArray = data;
 
-          var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          audioCtx.decodeAudioData(data, buffer => {
-
+          soundController.speakerContext.decodeAudioData(data, buffer => {
 
             console.log("adding buffer to audioCache")
             audioCache.push(buffer);
@@ -41,11 +39,6 @@ class AudioPlayer extends Component {
               soundController.playCache(audioCache);
             }
           });
-
-            // var source = audioCtx.createBufferSource();
-            // source.buffer = buffer;
-            // source.connect(audioCtx.destination);
-            // source.start();
 
         } else{
           console.log('Did not receive binary audio data')
@@ -61,17 +54,20 @@ class AudioPlayer extends Component {
 
     soundController.playCache = cache => {
       while(cache.length) {
+        console.log(`Cache length: ${cache.length}`)
         let buffer = cache.shift();
         let source = soundController.speakerContext.createBufferSource();
         source.buffer = buffer;
         source.connect(soundController.speakerContext.destination);
 
         if(soundController.nextTime == 0) {
-          soundController.nextTime = soundController.speakerContext.currentTime + 0.05;
+          soundController.nextTime = soundController.speakerContext.currentTime + 0.07;
         }
 
         source.start(soundController.nextTime);
         soundController.nextTime += source.buffer.duration;
+        console.log(`Duration: ${source.buffer.duration}`)
+        console.log(`Next time: ${soundController.nextTime}`)
       }
     }
 

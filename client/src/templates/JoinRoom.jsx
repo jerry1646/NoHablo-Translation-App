@@ -22,8 +22,8 @@ class JoinRoom extends React.Component{
       type: 'registration',
       content: {
         name: event.target.name.value,
-        language: event.target.listenerLanguage.value,
-        roomPin: event.target.roomId.value
+        language: event.target.listenerLanguage.options[event.target.listenerLanguage.selectedIndex].value,
+        roomId: event.target.roomId.value
       }
     }
     console.log(`Attempting registration to room ${event.target.roomId.value}`)
@@ -64,18 +64,40 @@ class JoinRoom extends React.Component{
 
   render(){
     return(
-      <div>
-        <h1> Join an existing room!</h1>
-          <form onSubmit={this.handleChange}>
-            <label>Name:</label>
-            <input type="text" name="name" />
-            <label>PIN:</label>
-            <input type="text" name="roomId" />
-            <label>Language:</label>
-            <input type="text" name="listenerLanguage" />
-            <input type="submit" value="Submit" />
-          </form>
-        <button onClick= {this.backToWelcome} id="GoBack">Back</button>
+      <div id='join-room'>
+        <div className="blurred-box">
+          <h1>Join a room!</h1>
+          <div className="user-info-box">
+            <form onSubmit={this.handleChange} className="user-info-form">
+
+              <input type="text" name="name" placeholder="Your Name" />
+
+              <input type="text" name="roomId" placeholder="Room Pin" />
+
+              <select name="listenerLanguage" id="language-list">
+                <option value="en-US">English (US)</option>
+                <option value="nl-NL">Dutch (Netherlands)</option>
+                <option value="en-AU">English (Australia)</option>
+                <option value="en-GB">English (UK)</option>
+                <option value="fr-FR">French</option>
+                <option value="fr-CA">French (Canada)</option>
+                <option value="de-DE">German</option>
+                <option value="it-IT">Italian</option>
+                <option value="ja-JP">Japanese</option>
+                <option value="ko-KR">Korean</option>
+                <option value="pt-BR">Portugese (Brazil)</option>
+                <option value="es-ES">Spanish</option>
+                <option value="sv-SE">Swedish</option>
+                <option value="tr-TR">Turkish</option>
+              </select>
+
+              <input type="submit" value="Submit" />
+
+              <button onClick= {this.backToWelcome} id="go-back-button">Back</button>
+
+            </form>
+          </div>
+        </div>
       </div>
     )
   }
