@@ -7,23 +7,33 @@
     border: 1px black solid;
   }
 
-  nav{
-    border: 1px black solid;
-    height: 40px;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    background-color: grey;
-    z-index: 1;
-  }
-
   .message-container{
-    margin-top: 40px;
     display: flex;
     align-items: flex-end;
     margin: 20px, 40px;
     justify-content: space-between;
     flex: 1;
+    position: relative;
+
+    .top-bar{
+      width: 100%;
+      height: 40px;
+      position: absolute;
+      top:0;
+      display: flex;
+      justify-content: space-between;
+
+      .connection-container,#top-placeholder{
+        width: 40px;
+      }
+
+      .roomname-container{
+        width: 40%;
+        text-align: center;
+      }
+
+
+    }
 
     .room-info-container{
       display: inline-block;
@@ -113,9 +123,9 @@
 
 }
 
-#audio-visualizer{
+#speaker-visualizer, #listener-visualizer{
   width: 100%;
-  height: 60px;
+  height: 100px;
 }
 
 /*Speaker stylings*/
@@ -125,8 +135,10 @@
 }
 
 #listener-view{
-
-  .listener-visualizer{
-    flex-basis: 30%;
+  #listener-visualizer{
+    display: flex;
+    justify-content: center;
   }
 }
+
+

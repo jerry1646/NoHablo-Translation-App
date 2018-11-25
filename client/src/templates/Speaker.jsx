@@ -28,10 +28,14 @@ class Speaker extends Component {
   render() {
     return (
       <div className='chatroom' id='speaker-view'>
-        <nav>
-
-        </nav>
         <div className='message-container'>
+          <div className='top-bar'>
+            <div className='connection-container'></div>
+            <div className='roomname-container'>
+              <h2>Room Pin: {this.props.parentStates.room_id}</h2>
+            </div>
+            <div id='top-placeholder'/>
+          </div>
           <div className='room-info-container'>
           {this.state.showInfo &&
             (

@@ -40,7 +40,7 @@ class Audio extends Component {
   render(){
     return (
       <div>
-        <div id='audio-visualizer'>
+        <div id='speaker-visualizer'>
           <canvas id="meter" width="600" height="40"></canvas>
         </div>
         <div className='bottom-bar'>

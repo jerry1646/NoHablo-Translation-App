@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import AnimatedLoader from '../animatedLoader/AnimatedLoader.js'
 
 class AudioPlayer extends Component {
 
@@ -6,7 +7,8 @@ class AudioPlayer extends Component {
     super()
 
     this.state={
-      infoActive:false
+      infoActive:false,
+      showSVG: false
     }
   }
 
@@ -24,6 +26,7 @@ class AudioPlayer extends Component {
 
       console.log("receiving data stream")
 
+      this.showSVG();
 
       //HANDLE INCOMING DATA
       stream.on('data', data => {
@@ -54,7 +57,9 @@ class AudioPlayer extends Component {
         } else{
           console.log('Did not receive binary audio data')
         }
+
       });
+
 
       //HANDLE STREAM CLOSING
       stream.on('end', () => {
@@ -64,12 +69,13 @@ class AudioPlayer extends Component {
     });
 
     soundController.playCache = cache => {
+      let totalTime = 0;
       while(cache.length) {
         let buffer = cache.shift();
         let source = soundController.speakerContext.createBufferSource();
         source.buffer = buffer;
         source.connect(soundController.speakerContext.destination);
-
+        totalTime += source.buffer.duration
         if(soundController.nextTime == 0) {
           soundController.nextTime = soundController.speakerContext.currentTime + 0.05;
         }
@@ -77,6 +83,8 @@ class AudioPlayer extends Component {
         source.start(soundController.nextTime);
         soundController.nextTime += source.buffer.duration;
       }
+      console.log(totalTime)
+      setTimeout(()=>{this.hideSVG()}, totalTime*1000);
     }
 
   }
@@ -84,11 +92,16 @@ class AudioPlayer extends Component {
   render(){
     return (
       <div>
+        <div className='animated-svg' id='listener-visualizer'>
+        {this.state.showSVG &&
+        (
+          <div>
+            <AnimatedLoader/>
+          </div>
+        )}
+        </div>
         <div className='bottom-bar'>
           <div className='side-buttons'>
-          </div>
-          <div className='listener-visualizer' id='audio-visualizer'>
-            <canvas id="meter" width="600" height="40"></canvas>
           </div>
           <div className='side-buttons'>
             <div className={this.state.active?'active-info side-button':'side-button'} id='room-info' onClick={this.toggleInfo}>i</div>
@@ -105,6 +118,20 @@ class AudioPlayer extends Component {
       infoActive: !currentState
     })
   }
+
+  showSVG = () => {
+    console.log('changing state to true')
+    this.setState({
+      showSVG: true
+    })
+  }
+
+  hideSVG = () => {
+    this.setState({
+      showSVG: false
+    })
+  }
+
 
 }
 

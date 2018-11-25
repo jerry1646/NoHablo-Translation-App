@@ -27,10 +27,15 @@ class Listener extends Component {
   render() {
     return (
       <div className='chatroom' id='listener-view'>
-        <nav>
-
-        </nav>
         <div className='message-container'>
+          <div className='top-bar'>
+            <div className='chatroom-logo'/>
+            <div className='roomname-container'>
+              <h2>Room Pin: {this.props.parentStates.room_id}</h2>
+            </div>
+            <div className='connection-container'></div>
+          </div>
+
           <div className='message-list their-message-list'>
            <TextMessages ws={this.props.parentStates.ws}/>
           </div>
