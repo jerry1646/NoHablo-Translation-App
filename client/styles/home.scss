@@ -9,15 +9,170 @@ body {
     background-size: cover;
 
 }
-.mid h1 {
-  font-family: 'Roboto', sans-serif;
+.title{
+
+}
+h1 {
+
+  font-family: 'Rock Salt', cursive;
+  //'Vibur'
   font-weight: 900;
   color: white;
-  text-transform: uppercase;
   margin: 0;
   position: absolute;
   top: 50%;
   left: 50%;
-  font-size: 2rem;
+  font-size: 3em;
   transform: translate(-50%, -50%);
 }
+
+
+#recordButton {
+  color: #494949 !important;
+  text-transform: uppercase;
+  background: rgba(255,255,255,1);
+  border: 4px solid #494949 !important;
+  border-radius: 10px;
+  display: inline-block;
+
+
+  margin-top: 50px;
+  margin-right: 20px;
+
+
+  text-decoration: none;
+  font-size: 0.7em;
+  font-family: 'Rock Salt', cursive;
+  font-weight: 900;
+  height:50px;
+  width:160px
+
+}
+#recordButton:hover {
+color: #ffffff !important;
+background: #f6b93b;
+border-color: #f6b93b !important;
+transition: all 0.4s ease 0s;
+font-weight:900;
+
+
+letter-spacing: 1px;
+-webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+-moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+
+}
+
+
+
+
+//NavBar
+.navigation{
+  height : 15%;
+  width : 100%;
+}
+.main-nav {
+  display: flex;
+  display: -webkit-flex;
+  flex-flow: row wrap;
+  /* This aligns items to the end line on main-axis */
+  justify-content: flex-start;
+}
+
+.main-nav img {
+  padding-top:10px;
+  margin-left: 0;
+  height:120px;
+  width:100px;
+  border-radius:100px;
+}
+.main-nav a{
+  margin-top: 30px;
+  font-family: 'Rock Salt', cursive;
+  font-weight: 500;
+  color: white;
+
+  margin-right: auto;
+  font-size: 2em;
+}
+
+.main-nav button {
+  margin-top: 50px;
+  margin-right: 20px;
+  border-radius: 5px;
+  background: white;
+  display: block;
+  text-decoration: none;
+  font-size: 0.8em;
+  font-family: 'Rock Salt', cursive;
+  font-weight: 900;
+  height:50px;
+  width:160px
+}
+
+.main-nav button:hover {
+color: #ffffff !important;
+background: #60B99A;
+border-color: #60B99A !important;
+transition: all 0.4s ease 0s;
+font-weight:900;
+
+
+letter-spacing: 1px;
+-webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+-moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+
+}
+
+/* Small screens */
+@media all and (max-width: 800px) {
+  .main-nav {
+    /* On small screens, we are no longer using row direction but column */
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+
+
+
+
+/* Start of Column CSS */
+#container2 {
+  display: flex;
+  font-family: 'Fredoka One', cursive;
+  color: white;
+  z-index:0;
+  /* column 2 background colour */
+}
+
+
+
+
+#col1 {
+ flex: 50%;
+ padding-right: 10px;
+ padding-left: 10px;
+ background:rgba(255, 204, 153,0.1);
+}
+#col2 {
+  flex: 50%;
+  padding-left: 10px;
+  padding-right: 10px;
+  background:rgba(51, 153, 255,0.1);
+}
+
+#container2 :hover{
+  color:black;
+  background: rgba(255, 255, 255,0.6) !important;
+  border-color: #f6b93b !important;
+  transition: all 1s ease 0s;
+  letter-spacing: 0.5px;
+
+  -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+  -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+  box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+}
+
+
