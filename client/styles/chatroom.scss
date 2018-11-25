@@ -3,6 +3,12 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-image: url('http://i.imgur.com/loAxGyL.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+
   div{
     border: 1px black solid;
   }
@@ -82,27 +88,17 @@
 
   .side-buttons{
     flex-basis: 20%;
-    .side-button{
-      width: 40px;
-      height: 40px;
-      border-radius: 20px;
-      background-color: grey;
-      color: white;
-      font-weight: 700;
-      margin: 0 auto;
-      padding: 10px 16px;
-      box-sizing: border-box;
-    }
+    text-align: center;
+    vertical-align: middle;
+    color: black;
 
-    .side-button:hover{
-      background-color: #aaa;
-      color: #222
+    i{
+      font-size: 36px;
     }
+  }
 
-    .active-info{
-      background-color: #aaa;
-      color: #222
-    }
+  .side-buttons:hover{
+    color: white;
   }
 
   .speaker-button{
@@ -110,15 +106,17 @@
     height: 75%;
     border-radius: 20px;
     padding: 10px;
-    background-color: springgreen;
+    background-color: rgba(255,255,255,0.5);
     box-sizing: border-box;
     text-align: center;
   }
 
-  .speaker-button:hover{
-    font-weight: 700;
-    color: white;
-    background-color: darkgreen;
+  .record:hover{
+    background-color: springgreen;
+  }
+
+  .stop:hover{
+    background-color: red;
   }
 
 }
@@ -141,4 +139,28 @@
   }
 }
 
+/*Listener SVG Animation*/
+/*enter*/
+.fade-enter{
+  opacity: 0;
+}
+
+.fade-enter-active{
+  opacity: 1;
+  transition: opacity 800ms linear;
+}
+
+/*exit*/
+.fade-exit{
+  opacity: 1;
+}
+
+.fade-exit-active{
+  opacity: 0;
+  transition: opacity 800ms linear;
+}
+
+.fade-exit-done{
+  opacity: 0;
+}
 

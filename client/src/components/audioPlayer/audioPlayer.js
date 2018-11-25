@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import AnimatedLoader from '../animatedLoader/AnimatedLoader.js'
+import {CSSTransition} from "react-transition-group";
 
 class AudioPlayer extends Component {
 
@@ -94,17 +95,25 @@ class AudioPlayer extends Component {
       <div>
         <div className='animated-svg' id='listener-visualizer'>
         {this.state.showSVG &&
-        (
-          <div>
-            <AnimatedLoader/>
-          </div>
+        ( <CSSTransition
+            in={this.state.showSVG}
+            appear={false}
+            timeout={800}
+            classNames="fade"
+          >
+            <div>
+              <AnimatedLoader/>
+            </div>
+          </CSSTransition>
         )}
         </div>
         <div className='bottom-bar'>
           <div className='side-buttons'>
           </div>
-          <div className='side-buttons'>
-            <div className={this.state.active?'active-info side-button':'side-button'} id='room-info' onClick={this.toggleInfo}>i</div>
+          <div className='side-buttons' id='room-info' onClick={this.toggleInfo}>
+            <i className="material-icons">
+            info
+            </i>
           </div>
         </div>
       </div>

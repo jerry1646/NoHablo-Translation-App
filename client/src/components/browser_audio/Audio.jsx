@@ -44,14 +44,20 @@ class Audio extends Component {
           <canvas id="meter" width="600" height="40"></canvas>
         </div>
         <div className='bottom-bar'>
-          <div className='side-buttons'>
-            <div className={this.state.infoActive?'active-info side-button':'side-button'} id='room-info' onClick={this.toggleInfo}>i</div>
+          <div className='side-buttons' id='room-info' onClick={this.toggleInfo}>
+            <i className="material-icons">
+            info
+            </i>
           </div>
           <div className='speaker-button record' onClick= {this.startRecording} id="recordButton">
-            <span>Record</span>
+            <span><i className="material-icons">
+            record_voice_over
+            </i></span>
           </div>
           <div className='speaker-button stop' onClick= {this.stopRecording} id="stopButton">
-            <span>Stop</span>
+            <span><i className="material-icons">
+            stop
+            </i></span>
           </div>
           <div className='side-buttons'>
           </div>

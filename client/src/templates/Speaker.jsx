@@ -32,7 +32,7 @@ class Speaker extends Component {
           <div className='top-bar'>
             <div className='connection-container'></div>
             <div className='roomname-container'>
-              <h2>Room Pin: {this.props.parentStates.room_id}</h2>
+              <h2>Room-{this.props.parentStates.room_id}</h2>
             </div>
             <div id='top-placeholder'/>
           </div>
