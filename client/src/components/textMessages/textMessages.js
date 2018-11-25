@@ -39,7 +39,7 @@ class TextMessages extends Component {
             //****************************************
 
             console.log(msg.content.info)
-            this.props.parentStates.ws.removeAllListeners('stream');
+            this.props.ws.removeAllListeners('stream');
           } else {
             console.log('expect message to be type "message" or content is empty')
           }
