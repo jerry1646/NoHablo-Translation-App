@@ -56,7 +56,7 @@
       .roomname-container{
         width: 40%;
         text-align: center;
-
+        font-family: 'Fredoka One', cursive;
         color: white;
       }
 
@@ -68,12 +68,61 @@
       flex-basis: 22%;
       margin: 0 40px 10px 40px;
 
-      .room-info{
-        width: 100%;
-        height: 100%;
-        padding: 10px;
+      .blurred-box {
+        z-index: 0;
+        width: 25vw;
+        min-width:290px;
+        max-width: 320px;
+        position: relative;
+        top: 0;
+        left: 0;
+        background: inherit;
+        overflow: hidden;
+        margin: auto;
         border-radius: 10px;
       }
+
+      .room-info-box {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin-top: 50px;
+        text-align: center;
+        z-index: 1;
+
+        color: white;
+        text-shadow: -1px 0 grey, 0 1px grey;
+
+        .room-info {
+          display: flex;
+          flex-direction: column;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: center;
+
+          width: 100%;
+          height: 100%;
+          padding: 10px;
+          border-radius: 10px;
+
+          p{
+            background: 0;
+            width: 200px;
+            outline: 0;
+            border: 0;
+            border-bottom: 2px solid rgba(255,255,255, 0.3);
+            margin: 20px 0;
+            padding-bottom: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: rgba(255,255,255, 0.8);
+          }
+        }
+      }
+
     }
 
     .message-list{
@@ -83,15 +132,16 @@
         .message-item{
           display: flex;
           .message-bubble{
-            border: solid 2px aqua;
-            background-color: aqua;
+            font-family: 'Verdana', sans-serif;
+            background-color: rgba(3,3,3,0.8);
+
             margin: 0 40px 10px 40px;
             border-radius: 10px;
             display: inline-block;
             max-width: 80%;
             padding: 8px 15px;
             box-sizing: border-box;
-            color: #222;
+            color: #fff;
 
           }
         }
