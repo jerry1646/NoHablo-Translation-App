@@ -2,21 +2,29 @@
 import React, {Component} from 'react';
 import NavBar from './NavBar.jsx'
 class Welcome extends React.Component{
+  constructor(props){
+    super(props);
+    this.tx={};
+  }
 
 
-  getCreateRoomView = () => {
+  componentDidMount(){
+    const getCreateRoomView = () => {
       this.props.parentMethods.changeView("CreateRoom");
     }
 
-  getJoinRoomView = () => {
+    const getJoinRoomView = () => {
     this.props.parentMethods.changeView("JoinRoom");
+  }
+    this.tx.getCreateRoomView=getCreateRoomView;
+    this.tx.getJoinRoomView=getJoinRoomView;
   }
 
   render(){
 
     return(
       <div className="welcome_page">
-        <NavBar />
+        <NavBar parentMethods={this.tx}/>
 
         <div id="container2">
             <div id="col1">

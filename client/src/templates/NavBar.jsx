@@ -10,8 +10,8 @@ class NavBar extends React.Component{
         <ul className="main-nav">
           <img id = 'logo' src="../styles/images/logo.png"/>
           <a>No Hablo</a>
-          <button onClick={this.getCreateRoomView} >Create Room</button>
-          <button onClick={this.getJoinRoomView} >Join Room</button>
+          <button onClick={this.props.parentMethods.getCreateRoomView} >Create Room</button>
+          <button onClick={this.props.parentMethods.getJoinRoomView} >Join Room</button>
         </ul>
       </nav>
 
