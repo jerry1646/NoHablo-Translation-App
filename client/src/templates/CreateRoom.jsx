@@ -5,6 +5,11 @@ class CreateRoom extends React.Component{
 
   constructor(){
     super()
+
+    this.state = {
+      errorMessage: "",
+      displayError: false
+    }
   }
 
   backToWelcome = () => {
@@ -52,7 +57,9 @@ class CreateRoom extends React.Component{
 
             this.props.parentMethods.changeView("Speaker");
           } else {
-            console.log("Create room request denied - reason unknown")
+            let errorMsg = "Create room request denied - Please try again"
+            this.setState({errorMessage: errorMsg, displayError: true})
+            console.log(errorMsg);
           }
         } else {
           console.log("Expect response from server to be a stringified JSON")
@@ -63,6 +70,13 @@ class CreateRoom extends React.Component{
   render(){
     return(
       <div id='create-room'>
+        {this.state.displayError &&
+            (
+              <div className='error-bar'>
+                <p>{this.state.errorMessage}</p>
+              </div>
+            )
+          }
         <div className="blurred-box">
           <h1>Create a room!</h1>
           <div className="user-info-box">
