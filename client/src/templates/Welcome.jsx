@@ -6,10 +6,6 @@ class Welcome extends React.Component{
   constructor(props){
     super(props);
     this.tx={};
-  }
-
-
-  componentDidMount(){
     const getCreateRoomView = () => {
       this.props.parentMethods.changeView("CreateRoom");
     }
@@ -21,13 +17,14 @@ class Welcome extends React.Component{
     this.tx.getJoinRoomView=getJoinRoomView;
   }
 
-  render(){
 
+  render(){
+    console.log(this.tx.getCreateRoomView);
     return(
       <div className="welcome_page">
         <NavBar parentMethods={this.tx}/>
         <div id="container2">
-            <div id="col1">
+            <div id="col1" onClick={this.tx.getCreateRoomView}>
               <h2>Create a room</h2>
               <figure><img src="../styles/images/Sample1.svg"/></figure>
               <p>It does not matter how much content is in each column, the background colours will always stretch down to the height of the tallest column.</p>
@@ -38,7 +35,7 @@ class Welcome extends React.Component{
               <h2>No Images</h2>
               <p>This Two column layout requires no images. Many CSS website designs need images to colour in the column backgrounds but that is not necessary with this design. Why waste bandwidth and precious HTTP requests when you can do everything in pure CSS and HTML?</p>
             </div>
-            <div id="col2">
+            <div id="col2" onClick={this.tx.getJoinRoomView}>
               <h2>Join a Room</h2>
               <figure><img src="../styles/images/Sample1.svg"/></figure>
               <p>This 2 column layout has been tested on the following browsers:</p>

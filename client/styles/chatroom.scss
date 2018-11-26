@@ -14,6 +14,7 @@
   }
 
   .message-container{
+    background: inherit;
     display: flex;
     align-items: flex-end;
     margin: 20px, 40px;
@@ -64,6 +65,7 @@
     }
 
     .room-info-container{
+      background: inherit;
       display: inline-block;
       flex-basis: 22%;
       margin: 0 40px 10px 40px;
@@ -82,6 +84,19 @@
         border-radius: 10px;
       }
 
+      .blurred-box:after {
+        z-index: -1;
+        content: '';
+        background: inherit;
+        position: absolute;
+        left: -25px;
+        right: -25px;
+        top: -25px;
+        bottom: -25px;
+        box-shadow: inset 0 0 0 500px rgba(255,255,255,0.2);
+        filter: blur(10px);
+      }
+
       .room-info-box {
         display: flex;
         flex-direction: column;
@@ -89,12 +104,11 @@
         justify-content: center;
         align-items: center;
         position: relative;
-        margin-top: 50px;
+        margin-top: 10px;
         text-align: center;
         z-index: 1;
 
         color: white;
-        text-shadow: -1px 0 grey, 0 1px grey;
 
         .room-info {
           display: flex;
@@ -102,6 +116,7 @@
           flex-wrap: wrap;
           justify-content: center;
           align-items: center;
+          font-family: 'Verdana', sans-serif;
 
           width: 100%;
           height: 100%;
@@ -113,12 +128,10 @@
             width: 200px;
             outline: 0;
             border: 0;
-            border-bottom: 2px solid rgba(255,255,255, 0.3);
-            margin: 20px 0;
+            margin: 10px 0;
             padding-bottom: 10px;
-            font-size: 24px;
+            font-size: 1em;
             font-weight: bold;
-            color: rgba(255,255,255, 0.8);
           }
         }
       }

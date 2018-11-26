@@ -50,9 +50,10 @@
     "aos": "^2.3.4",
     "dat.gui": "^0.7.3",
     "form-data": "^2.3.3",
-    "react": "15.4.2",
-    "react-dom": "15.4.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "react-responsive-navbar": "^1.0.11",
+    "react-transition-group": "^2.5.0",
     "react-scroll-parallax": "^1.3.5"
   }
 }
