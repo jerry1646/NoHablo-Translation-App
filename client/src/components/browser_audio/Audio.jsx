@@ -3,21 +3,25 @@ import React, {Component} from 'react';
 // import recorder from './recorder.js'
 import * as dat from 'dat.gui';
 
+
 class Audio extends Component {
 
   constructor(){
     super();
     this.state={
-      RecordedAudio: new Blob([], { type: 'audio/wav' })
+      RecordedAudio: new Blob([], { type: 'audio/wav' }),
+      infoActive: false
     }
 
-    /*helper variables*/
+   /*************************
+      Audio Record Variables
+    **************************/
     this.gumStream; //stream from getUserMedia()
     this.rec; //Recorder.js object
     this.input; //MediaStreamAudioSourceNode we'll be recording
-    // shim for AudioContext when it's not avb.
     this.AudioContext;
     this.audioContext; //new audio context to help us record
+
     // this.startRecording = this.startRecording.bind(this);
     // this.stopRecording = this.stopRecording.bind(this);
     // this.getWavAudio = this.getWavAudio.bind(this);
@@ -56,11 +60,13 @@ class Audio extends Component {
     // shuffle frequencies so that neighbors are not too similar
     this.shuffle = [1, 3, 0, 4, 2];
 
+
   }
 
   componentDidMount() {
     this.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new AudioContext; //new audio context to help us recordß
+
     this.ctx = canvas.getContext("2d");
     this.analyser = this.audioContext.createAnalyser();
     // Interactive dat.GUI controls
@@ -91,16 +97,47 @@ class Audio extends Component {
     this.gui.add(this.opts, "shift", 0, 200);
 
 
+
   }
 
   render(){
     return (
       <div>
+        <div id='speaker-visualizer'>
         <canvas id="canvas"></canvas>
-        <button onClick= {this.startRecording} id="recordButton">Record</button>
-        <button onClick= {this.stopRecording} id="stopButton" >Stop</button>
+        </div>
+        <div className='bottom-bar'>
+          <div className='side-buttons' id='room-info' onClick={this.toggleInfo}>
+            <i className="material-icons">
+            info
+            </i>
+          </div>
+          <div className='speaker-button record' onClick= {this.startRecording} id="recordButton">
+            <span><i className="material-icons">
+            record_voice_over
+            </i></span>
+          </div>
+          <div className='speaker-button stop' onClick= {this.stopRecording} id="stopButton">
+            <span><i className="material-icons">
+            stop
+            </i></span>
+          </div>
+          <div className='side-buttons'>
+          </div>
+        </div>
       </div>
     )
+  }
+
+
+  //Private functions
+
+  toggleInfo = (e) => {
+    let currentState = this.state.active
+    this.props.methods.toggleInfo();
+    this.setState({
+      infoActive: !currentState
+    })
   }
 
   startRecording = () => {
@@ -109,31 +146,6 @@ class Audio extends Component {
 
     recordButton.disabled = true;
     stopButton.disabled = false;
-
-
-
-    // var constraints = { audio: true, video:false }
-    //   navigator.mediaDevices.getUserMedia(constraints).then((stream)=>{
-    //       console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
-
-    //       /* assign to gumStream for later use */
-    //       this.gumStream = stream;
-    //        // use the stream
-    //       this.input = this.audioContext.createMediaStreamSource(stream);
-    //       //numChannels:1 mono recording
-    //       this.rec = new Recorder(this.input,{numChannels:1})
-    //       //start the recording process
-    //       this.rec.record()
-    //       console.log("Recording started");
-
-    //   }).catch(function(err) {
-    //       //enable the record button if getUserMedia() fails
-    //       console.log(err);
-    //       recordButton.disabled = false;
-    //       stopButton.disabled = true;
-    //   });
-    // }
-
 
     var displayConstraints = {
       "audio": {
@@ -192,17 +204,6 @@ class Audio extends Component {
 
     //create the wav blob and save blob data to RecordAudio
     this.rec.exportWAV(this.getWavAudio)
-
-    /*
-        create the client socket and send RecordedAudio to server
-        and
-        after successfully send, active  start button
-    */
-    // var host = 'ws://localhost:5000/binary-endpoint';
-    // var client = new BinaryClient(host);
-    // console.log(this.RecordedAudio);
-    // setTimeout(function(){ client.send(this.RecordedAudio); }, 3000);
-
   }
 
 
@@ -211,8 +212,6 @@ class Audio extends Component {
     this.RecordedAudio = blob;
     this.props.ws.send(this.RecordedAudio);
   }
-
-
 
   gotStream = stream => {
     // Create an AudioNode from the stream.

@@ -1,9 +1,16 @@
 import React, {Component} from 'react';
+import AnimatedLoader from '../animatedLoader/AnimatedLoader.js'
+import {CSSTransition} from "react-transition-group";
 
 class AudioPlayer extends Component {
 
   constructor(){
     super()
+
+    this.state={
+      infoActive:false,
+      showSVG: false
+    }
   }
 
   componentDidMount(){
@@ -21,6 +28,7 @@ class AudioPlayer extends Component {
 
       console.log("receiving data stream")
 
+      this.showSVG();
 
       //HANDLE INCOMING DATA
       stream.on('data', data => {
@@ -43,7 +51,9 @@ class AudioPlayer extends Component {
         } else{
           console.log('Did not receive binary audio data')
         }
+
       });
+
 
       //HANDLE STREAM CLOSING
       stream.on('end', () => {
@@ -53,13 +63,14 @@ class AudioPlayer extends Component {
     });
 
     soundController.playCache = cache => {
+      let totalTime = 0;
       while(cache.length) {
         console.log(`Cache length: ${cache.length}`)
         let buffer = cache.shift();
         let source = soundController.speakerContext.createBufferSource();
         source.buffer = buffer;
         source.connect(soundController.speakerContext.destination);
-
+        totalTime += source.buffer.duration
         if(soundController.nextTime == 0) {
           soundController.nextTime = soundController.speakerContext.currentTime + 0.07;
         }
@@ -69,6 +80,8 @@ class AudioPlayer extends Component {
         console.log(`Duration: ${source.buffer.duration}`)
         console.log(`Next time: ${soundController.nextTime}`)
       }
+      console.log(totalTime)
+      setTimeout(()=>{this.hideSVG()}, totalTime*1000);
     }
 
   }
@@ -76,9 +89,54 @@ class AudioPlayer extends Component {
   render(){
     return (
       <div>
+        <div className='animated-svg' id='listener-visualizer'>
+        {this.state.showSVG &&
+        ( <CSSTransition
+            in={this.state.showSVG}
+            appear={false}
+            timeout={800}
+            classNames="fade"
+          >
+            <div>
+              <AnimatedLoader/>
+            </div>
+          </CSSTransition>
+        )}
+        </div>
+        <div className='bottom-bar'>
+          <div className='side-buttons'>
+          </div>
+          <div className='side-buttons' id='room-info' onClick={this.toggleInfo}>
+            <i className="material-icons">
+            info
+            </i>
+          </div>
+        </div>
       </div>
     )
   }
+
+  toggleInfo = (e) => {
+    let currentState = this.state.active
+    this.props.methods.toggleInfo();
+    this.setState({
+      infoActive: !currentState
+    })
+  }
+
+  showSVG = () => {
+    console.log('changing state to true')
+    this.setState({
+      showSVG: true
+    })
+  }
+
+  hideSVG = () => {
+    this.setState({
+      showSVG: false
+    })
+  }
+
 
 }
 
