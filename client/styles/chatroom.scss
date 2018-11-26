@@ -1,0 +1,206 @@
+/*Shared stylings*/
+.chatroom{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-image: url('http://i.imgur.com/loAxGyL.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+
+  div{
+    border: 1px black solid;
+  }
+
+  .message-container{
+    display: flex;
+    align-items: flex-end;
+    margin: 20px, 40px;
+    justify-content: space-between;
+    flex: 1;
+    position: relative;
+
+    .top-bar{
+      width: 100%;
+      height: 75px;
+      position: absolute;
+      top:0;
+      display: flex;
+      justify-content: space-between;
+
+
+
+      .connection-container,.chatroom-logo{
+        width: 75px;
+      }
+
+      .connection-container{
+        text-align: center;
+        vertical-align: middle;
+        padding-top: 12px;
+
+        i{
+          font-size: 40px;
+        }
+
+        #disconnected{
+          color: red;
+        }
+
+        #connected{
+          color: springgreen;
+        }
+      }
+
+      .roomname-container{
+        width: 40%;
+        text-align: center;
+
+        color: white;
+      }
+
+
+    }
+
+    .room-info-container{
+      display: inline-block;
+      flex-basis: 22%;
+      margin: 0 40px 10px 40px;
+
+      .room-info{
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        border-radius: 10px;
+      }
+    }
+
+    .message-list{
+      flex-basis: 60%;
+
+      .messages{
+        .message-item{
+          display: flex;
+          .message-bubble{
+            border: solid 2px aqua;
+            background-color: aqua;
+            margin: 0 40px 10px 40px;
+            border-radius: 10px;
+            display: inline-block;
+            max-width: 80%;
+            padding: 8px 15px;
+            box-sizing: border-box;
+            color: #222;
+
+          }
+        }
+      }
+    }
+  }
+
+
+  .bottom-bar{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .side-buttons{
+    flex-basis: 20%;
+    text-align: center;
+    vertical-align: middle;
+    color: black;
+
+    i{
+      font-size: 36px;
+    }
+  }
+
+  .side-buttons:hover{
+    color: white;
+  }
+
+  .speaker-button{
+    flex-basis: 15%;
+    height: 75%;
+    border-radius: 20px;
+    padding: 10px;
+    background-color: rgba(255,255,255,0.5);
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .record:hover{
+    background-color: springgreen;
+  }
+
+  .stop:hover{
+    background-color: red;
+  }
+
+}
+
+#speaker-visualizer, #listener-visualizer{
+  width: 100%;
+  height: 100px;
+}
+
+/*Speaker stylings*/
+
+#speaker-view{
+  .message-container{
+    .message-list{
+      .messages{
+        .message-item{
+          justify-content: flex-end;
+        }
+      }
+    }
+  }
+
+}
+
+#listener-view{
+  .message-container{
+    .message-list{
+      .messages{
+        .message-item{
+        justify-content: flex-start;
+        }
+      }
+    }
+  }
+
+  #listener-visualizer{
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/*Listener SVG Animation*/
+/*enter*/
+.fade-enter{
+  opacity: 0;
+}
+
+.fade-enter-active{
+  opacity: 1;
+  transition: opacity 800ms linear;
+}
+
+/*exit*/
+.fade-exit{
+  opacity: 1;
+}
+
+.fade-exit-active{
+  opacity: 0;
+  transition: opacity 800ms linear;
+}
+
+.fade-exit-done{
+  opacity: 0;
+}
+
