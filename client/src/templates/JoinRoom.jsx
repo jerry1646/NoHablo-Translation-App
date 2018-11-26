@@ -5,6 +5,11 @@ class JoinRoom extends React.Component{
 
   constructor(){
     super()
+
+    this.state = {
+      errorMessage: "",
+      displayError: false
+    }
   }
 
   backToWelcome = () => {
@@ -54,7 +59,9 @@ class JoinRoom extends React.Component{
           this.props.parentMethods.changeView("Listener");
 
         } else {
-          console.log(`Join room request denied - ${msg.content.type}: ${msg.content.text}`);
+          let errorMsg = `Join room request denied - ${msg.content.type}: ${msg.content.text}`
+          this.setState({errorMessage: errorMsg, displayError: true})
+          console.log(errorMsg);
         }
       } else {
         console.log("Expect response from server to be a stringified JSON")
@@ -65,6 +72,14 @@ class JoinRoom extends React.Component{
   render(){
     return(
       <div id='join-room'>
+        {this.state.displayError &&
+          (
+            <div className='error-bar'>
+              <p>{this.state.errorMessage}</p>
+            </div>
+          )
+        }
+
         <div className="blurred-box">
           <h1>Join a room!</h1>
           <div className="user-info-box">
