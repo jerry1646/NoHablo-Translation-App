@@ -6,14 +6,20 @@ class NavBar extends React.Component{
 
     return(
 
-      <nav className="navigation">
-        <ul className="main-nav">
-          <img id = 'logo' src="../styles/images/logo.png"/>
-          <a>No Hablo</a>
-          <button onClick={this.props.parentMethods.getCreateRoomView} >Create Room</button>
-          <button onClick={this.props.parentMethods.getJoinRoomView} >Join Room</button>
-        </ul>
+      <nav className="navigation main-nav">
+          <div id='logo-container'>
+            <img id = 'logo' src="../styles/images/logo-bright.png"/>
+            <div>
+            <a>No Hablo</a>
+            </div>
+          </div>
+          <div id='middle-placeholder'/>
+          <div id='navbar-button-container'>
+            <button onClick={this.props.parentMethods.getCreateRoomView} >Create Room</button>
+            <button onClick={this.props.parentMethods.getJoinRoomView} >Join Room</button>
+          </div>
       </nav>
+
 
     )
   }
