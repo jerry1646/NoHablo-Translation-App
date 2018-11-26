@@ -160,7 +160,7 @@ binaryServer.on('connection', client => {
           }
         }
         rooms[id].broadcastMessage(msg);
-        setTimeout(() => {delete rooms[id]}, 1000);
+        setTimeout(() => {delete rooms[id]}, 10000);
         console.log(`Rooms ${rooms}`)
       }
     }
