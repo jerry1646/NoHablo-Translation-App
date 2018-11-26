@@ -33,7 +33,7 @@ class Speaker extends Component {
           <div className='top-bar'>
             <div className='chatroom-logo'/>
             <div className='roomname-container'>
-              <h2>Room-{this.props.parentStates.room_id}</h2>
+              <h2>Room Pin: {this.props.parentStates.room_id}</h2>
             </div>
             <div className='connection-container'>
               <ConnectionIndicator ws={this.props.parentStates.ws}/>
@@ -42,11 +42,13 @@ class Speaker extends Component {
           <div className='room-info-container'>
           {this.state.showInfo &&
             (
-            <div className='room-info'>
-              <p>Speaker</p>
-              <p>Room Name:{this.props.parentStates.room_name}</p>
-              <p>Room ID:{this.props.parentStates.room_id}</p>
-              <p>Speaker Language:{this.props.parentStates.language}</p>
+            <div className='blurred-box'>
+              <div className='room-info-box'>
+                <div className='room-info'>
+                  <p>Room ID: {this.props.parentStates.room_id}</p>
+                  <p>Speaker Language: {this.props.parentStates.language}</p>
+                </div>
+              </div>
             </div>
           )}
           </div>
