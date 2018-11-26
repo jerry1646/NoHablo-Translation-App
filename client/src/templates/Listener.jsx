@@ -5,6 +5,7 @@
 // https://codepen.io/fgnass/pen/LWeKNq
 import AudioPlayer from '../components/audioPlayer/audioPlayer.js'
 import TextMessages from '../components/textMessages/textMessages.js'
+import ConnectionIndicator from '../components/connectionIndicator/ConnectionIndicator.js'
 
 import React, {Component} from 'react';
 class Listener extends Component {
@@ -33,11 +34,13 @@ class Listener extends Component {
             <div className='roomname-container'>
               <h2>Room-{this.props.parentStates.room_id}</h2>
             </div>
-            <div className='connection-container'></div>
+            <div className='connection-container'>
+             <ConnectionIndicator ws={this.props.parentStates.ws}/>
+            </div>
           </div>
 
           <div className='message-list their-message-list'>
-           <TextMessages ws={this.props.parentStates.ws}/>
+            <TextMessages ws={this.props.parentStates.ws}/>
           </div>
 
           <div className='room-info-container'>

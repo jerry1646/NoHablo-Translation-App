@@ -6,6 +6,7 @@
 import React, {Component} from 'react';
 import Audio from '../components/browser_audio/Audio.jsx'
 import TextMessages from '../components/textMessages/textMessages.js'
+import ConnectionIndicator from '../components/connectionIndicator/ConnectionIndicator.js'
 
 
 class Speaker extends Component {
@@ -30,11 +31,13 @@ class Speaker extends Component {
       <div className='chatroom' id='speaker-view'>
         <div className='message-container'>
           <div className='top-bar'>
-            <div className='connection-container'></div>
+            <div className='chatroom-logo'/>
             <div className='roomname-container'>
               <h2>Room-{this.props.parentStates.room_id}</h2>
             </div>
-            <div id='top-placeholder'/>
+            <div className='connection-container'>
+              <ConnectionIndicator ws={this.props.parentStates.ws}/>
+            </div>
           </div>
           <div className='room-info-container'>
           {this.state.showInfo &&
