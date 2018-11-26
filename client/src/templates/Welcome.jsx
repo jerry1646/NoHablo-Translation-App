@@ -1,6 +1,7 @@
 
 import React, {Component} from 'react';
 import NavBar from './NavBar.jsx'
+
 class Welcome extends React.Component{
   constructor(props){
     super(props);
@@ -25,7 +26,6 @@ class Welcome extends React.Component{
     return(
       <div className="welcome_page">
         <NavBar parentMethods={this.tx}/>
-
         <div id="container2">
             <div id="col1">
               <h2>Create a room</h2>
