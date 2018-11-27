@@ -32,7 +32,7 @@ class Listener extends Component {
           <div className='top-bar'>
             <div className='chatroom-logo'/>
             <div className='roomname-container'>
-              <h2>Room Pin: {this.props.parentStates.room_id}</h2>
+              <h2>Room: {this.props.parentStates.room_name}</h2>
             </div>
             <div className='connection-container'>
              <ConnectionIndicator ws={this.props.parentStates.ws}/>

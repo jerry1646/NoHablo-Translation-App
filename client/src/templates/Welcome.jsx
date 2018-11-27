@@ -21,44 +21,32 @@ class Welcome extends React.Component{
   render(){
     console.log(this.tx.getCreateRoomView);
     return(
-      <div className="welcome_page">
+      <div className="welcome-page">
         <NavBar parentMethods={this.tx}/>
         <div id="container2">
             <div id="col1" onClick={this.tx.getCreateRoomView}>
               <h2>Create a room</h2>
-              <figure><img src="../styles/images/Sample1.svg"/></figure>
-              <p>It does not matter how much content is in each column, the background colours will always stretch down to the height of the tallest column.</p>
-              <h2>2 Column Dimensions</h2>
-              <p>Each column is 50 percent wide with 2 percent padding on each side.</p>
-              <h2>No CSS hacks</h2>
-              <p>The CSS used for this 2 column layout is 100% valid and hack free. To overcome Internet Explorer's broken box model, no horizontal padding or margins are used. Instead, this design uses percentage widths and clever relative positioning.</p>
-              <h2>No Images</h2>
-              <p>This Two column layout requires no images. Many CSS website designs need images to colour in the column backgrounds but that is not necessary with this design. Why waste bandwidth and precious HTTP requests when you can do everything in pure CSS and HTML?</p>
+              <figure><img src="../styles/images/speaker2.png" id="speaker"/></figure>
+              <div className="info">
+                <p>
+                  Create a room so that others can listen to you!
+                </p>
+                <p>
+                  Select a language, name the room, and share the room pin with your listeners!
+                </p>
+              </div>
             </div>
             <div id="col2" onClick={this.tx.getJoinRoomView}>
               <h2>Join a Room</h2>
-              <figure><img src="../styles/images/Sample1.svg"/></figure>
-              <p>This 2 column layout has been tested on the following browsers:</p>
-              <h3>iPhone &amp; iPod Touch</h3>
-              <ul>
-                <li>Safari</li>
-              </ul>
-              <h3>Mac</h3>
-              <ul>
-                <li>Safari</li>
-                <li>Firefox</li>
-                <li>Opera 9</li>
-                <li>Netscape 7 &amp; 9</li>
-              </ul>
-              <h3>Windows</h3>
-              <ul>
-                <li>Firefox 1.5, 2 &amp; 3</li>
-                <li>Safari</li>
-                <li>Opera 8 &amp; 9</li>
-                <li>Explorer 5.5, 6 &amp; 7</li>
-                <li>Google Chrome</li>
-                <li>Netscape 8</li>
-              </ul>
+              <figure><img src="../styles/images/headphones2.png" id="listener"/></figure>
+              <div className="info">
+                <p>
+                  Join a room and listener in your native tongue!
+                </p>
+                <p>
+                  Select a language, set your name, input the speaker's Pin and you're all set!
+                </p>
+              </div>
             </div>
           </div>
 

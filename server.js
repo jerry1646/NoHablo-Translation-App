@@ -69,13 +69,14 @@ binaryServer.on('connection', client => {
         switch(msg.type) {
 
           case 'create-room':
-            rooms[currentRoomId] = new Chatroom(currentRoomId, client.id, msg.content.language, binaryServer.clients);
+            rooms[currentRoomId] = new Chatroom(currentRoomId, msg.content.name, client.id, msg.content.language, binaryServer.clients);
             console.log(`Created a new room with id: ${currentRoomId}`)
             //Send room information to client to be shared
             let response = JSON.stringify({
               type: 'notification',
               content: {
                 text: 'success',
+                name: msg.content.name,
                 id: currentRoomId,
                 language: msg.content.language
               }
@@ -103,6 +104,7 @@ binaryServer.on('connection', client => {
                 type: 'notification',
                 content: {
                   text: "success",
+                  name: rooms[msg.content.roomId].getRoomName(),
                   id: msg.content.roomId,
                   language: msg.content.language
                 }
