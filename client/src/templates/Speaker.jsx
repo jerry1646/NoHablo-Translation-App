@@ -26,6 +26,7 @@ class Speaker extends Component {
     }
   }
 
+
   render() {
     return (
       <div className='chatroom' id='speaker-view'>

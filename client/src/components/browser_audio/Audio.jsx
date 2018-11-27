@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 // import {startRecording, stopRecording} from './helper.js'
 // import recorder from './recorder.js'
-import * as dat from 'dat.gui';
+// import * as dat from 'dat.gui';
 
 
 class Audio extends Component {
@@ -10,7 +10,8 @@ class Audio extends Component {
     super();
     this.state={
       RecordedAudio: new Blob([], { type: 'audio/wav' }),
-      infoActive: false
+      infoActive: false,
+      visualizeAudio: false
     }
 
    /*************************
@@ -34,17 +35,17 @@ class Audio extends Component {
     ****************/
     // the canvas size
     this.WIDTH = 1000;
-    this.HEIGHT = 400;
+    this.HEIGHT = 200;
 
 
 
     // options to tweak the look
     this.opts = {
-      smoothing: 0.6,
+      smoothing: 0.7,
       fft: 5,
-      minDecibels: -70,
+      minDecibels: -60,
       scale: 0.2,
-      glow: 10,
+      glow: 50,
       color1: [203, 36, 128],
       color2: [41, 200, 192],
       color3: [24, 137, 218],
@@ -52,7 +53,7 @@ class Audio extends Component {
       lineWidth: 1,
       blend: "screen",
       shift: 50,
-      width: 60,
+      width: 50,
       amp: 1
     };
 
@@ -68,43 +69,16 @@ class Audio extends Component {
     this.audioContext = new AudioContext; //new audio context to help us recordß
 
     this.ctx = canvas.getContext("2d");
-    this.analyser = this.audioContext.createAnalyser();
-    // Interactive dat.GUI controls
-    this.gui = new dat.GUI();
-
-    // hide them by default
-    this.gui.close();
-
-    // connect gui to opts
-    this.gui.addColor(this.opts, "color1");
-    this.gui.addColor(this.opts, "color2");
-    this.gui.addColor(this.opts, "color3");
-    this.gui.add(this.opts, "fillOpacity", 0, 1);
-    this.gui.add(this.opts, "lineWidth", 0, 10).step(1);
-    this.gui.add(this.opts, "glow", 0, 100);
-    this.gui.add(this.opts, "blend", [
-      "normal",
-      "multiply",
-      "screen",
-      "overlay",
-      "lighten",
-      "difference"
-    ]);
-    this.gui.add(this.opts, "smoothing", 0, 1);
-    this.gui.add(this.opts, "minDecibels", -100, 0);
-    this.gui.add(this.opts, "amp", 0, 5);
-    this.gui.add(this.opts, "width", 0, 60);
-    this.gui.add(this.opts, "shift", 0, 200);
-
-
-
+    // this.analyser = this.audioContext.createAnalyser();
   }
 
   render(){
     return (
       <div>
         <div id='speaker-visualizer'>
-        <canvas id="canvas"></canvas>
+          <div id='canvas-container'>
+            <canvas id="canvas"></canvas>
+          </div>
         </div>
         <div className='bottom-bar'>
           <div className='side-buttons' id='room-info' onClick={this.toggleInfo}>
@@ -143,6 +117,10 @@ class Audio extends Component {
   startRecording = () => {
     console.log("recordButton clicked in Audio file");
 
+    //instantiate analyser everything to reset visualizer
+    this.analyser = this.audioContext.createAnalyser();
+
+
 
     recordButton.disabled = true;
     stopButton.disabled = false;
@@ -176,6 +154,7 @@ class Audio extends Component {
         //***********************
         //    For Display Audio
         //***********************
+        this.setState({visualizeAudio:true})
         this.gotStream(stream);
       })
       .catch(function(err) {
@@ -204,6 +183,12 @@ class Audio extends Component {
 
     //create the wav blob and save blob data to RecordAudio
     this.rec.exportWAV(this.getWavAudio)
+
+    //disable visualizer
+    this.setState({visualizeAudio:false})
+    this.analyser=null;
+    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   }
 
 
@@ -217,11 +202,10 @@ class Audio extends Component {
     // Create an AudioNode from the stream.
     // mediaStreamSource = this.audioContext.createMediaStreamSource(stream);
 
-
+    console.log('++++++++VISUAL+++++++++++')
     // Array to hold the analyzed frequencies
     this.freqs = new Uint8Array(this.analyser.frequencyBinCount);
     this.input.connect(this.analyser);
-    requestAnimationFrame(this.visualize);
     requestAnimationFrame(this.visualize);
 
   }
@@ -229,25 +213,30 @@ class Audio extends Component {
 
   visualize=()=>{
 
-  // set analysert props in the loop react on dat.gui changes
-  this.analyser.smoothingTimeConstant = this.opts.smoothing;
-  this.analyser.fftSize = Math.pow(2, this.opts.fft);
-  this.analyser.minDecibels = this.opts.minDecibels;
-  this.analyser.maxDecibels = 0;
-  this.analyser.getByteFrequencyData(this.freqs);
+    // set analysert props in the loop react on dat.gui changes
+    this.analyser.smoothingTimeConstant = this.opts.smoothing;
+    this.analyser.fftSize = Math.pow(2, this.opts.fft);
+    this.analyser.minDecibels = this.opts.minDecibels;
+    this.analyser.maxDecibels = 0;
+    this.analyser.getByteFrequencyData(this.freqs);
 
-  // set size to clear the canvas on each frame
-  canvas.width = this.WIDTH;
-  canvas.height = this.HEIGHT;
+    // set size to clear the canvas on each frame
+    canvas.width = this.WIDTH;
+    canvas.height = this.HEIGHT;
 
-  // draw three curves (R/G/B)
-  this.path(0);
-  this.path(1);
-  this.path(2);
+    // draw three curves (R/G/B)
+    this.path(0);
+    this.path(1);
+    this.path(2);
 
-  // schedule next paint
-  requestAnimationFrame(this.visualize);
-}
+    // schedule next paint
+    if(this.state.visualizeAudio){
+    requestAnimationFrame(this.visualize);
+    } else {
+      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+      return;
+    };
+  }
 
 
   path=(channel)=> {

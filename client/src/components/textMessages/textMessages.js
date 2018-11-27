@@ -64,6 +64,10 @@ class TextMessages extends Component {
       </div>
     )
   }
+
+  // scrollToBottom = () => {
+  //   this.endOfMsg.scrollIntoView({ behavior: "instant", block: "end" });
+  // }
 }
 
 export default TextMessages
