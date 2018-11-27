@@ -6,7 +6,6 @@
 
   /*NavBar*/
   .navigation{
-    padding-left: 20px;
     height : 100px;
     width : 100%;
     margin: 0;
@@ -38,6 +37,7 @@
     display: flex;
     justify-content: space-around;
     padding: 24px;
+
   }
 
   .main-nav img {
@@ -56,32 +56,30 @@
   }
 
   .main-nav button {
-    border-radius: 5px;
-    background: white;
     display: block;
     text-decoration: none;
-    font-size: 0.8em;
-    font-family: 'Rock Salt', cursive;
+
+    margin: 5px;
+
+    font-size: 1em;
+    /*font-family: 'Fredoka One', cursive;*/
     font-weight: 900;
+
+    color: white;
+    background: #df2359;
+    border-radius: 10px;
+    border: none;
+
     height:50px;
     width:160px;
-    cursor: pointer;
 
+    cursor: pointer;
+    transition: all 600ms ease-in-out;
   }
 
   .main-nav button:hover {
-  color: #ffffff !important;
-  background: #60B99A;
-  border-color: #60B99A !important;
-  transition: all 0.4s ease 0s;
-  font-weight:900;
-
-
-  letter-spacing: 1px;
-  -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-  -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-  box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
-
+    background: #60B99A;
+    transition: all 0.4s ease 0s;
   }
 
   /* Small screens */
@@ -166,6 +164,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     p {
       display: flex;
       margin-top: 0;
