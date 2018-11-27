@@ -19,7 +19,6 @@ class Welcome extends React.Component{
 
 
   render(){
-    console.log(this.tx.getCreateRoomView);
     return(
       <div className="welcome-page">
         <NavBar parentMethods={this.tx}/>
