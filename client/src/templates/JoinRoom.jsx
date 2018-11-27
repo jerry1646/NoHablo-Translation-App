@@ -46,7 +46,7 @@ class JoinRoom extends React.Component{
         if(msg.type === 'notification' && msg.content.text === 'success') {
 
           this.props.parentMethods.changeRoomID(msg.content.id);
-          this.props.parentMethods.changeRoomName('RoomSession'+msg.content.id);
+          this.props.parentMethods.changeRoomName(msg.content.name);
           this.props.parentMethods.changeLanguage(msg.content.language);
 
           this.props.parentStates.ws.removeAllListeners('stream');
