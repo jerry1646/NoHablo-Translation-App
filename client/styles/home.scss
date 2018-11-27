@@ -95,6 +95,15 @@ box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
   color: white;
   z-index:0;
   /* column 2 background colour */
+
+  figure {
+  border-radius: 50%;
+
+    img {
+      border-radius: 50%;
+      filter: invert(100%);
+    }
+  }
 }
 
 
@@ -123,6 +132,15 @@ box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
   -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
   -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
   box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+
+  figure {
+  border-radius: 50%;
+
+    img {
+      border-radius: 50%;
+    }
+  }
+
 }
 
 
