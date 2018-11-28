@@ -24,6 +24,7 @@ class TextMessages extends Component {
 
         console.log(`Text message handler received data: ${data}`)
         if(data && typeof(data) == 'string'){
+          console.log('string data received: ',data)
 
           let msg = JSON.parse(data);
           if(msg.type === 'message' && msg.content.inText){
@@ -32,14 +33,14 @@ class TextMessages extends Component {
             this.setState({messageList: newMessageList})
             console.log(this.state.messageList)
 
-          } else if(msg.type === 'notification' && msg.content.info) {
+          // } else if(msg.type === 'notification' && msg.content.info) {
 
-            //****************************************
-            //*         EDIT HERE JERRY PLZ          *
-            //****************************************
+          //   //****************************************
+          //   //*         EDIT HERE JERRY PLZ          *
+          //   //****************************************
 
-            console.log(msg.content.info)
-            this.props.ws.removeAllListeners('stream');
+          //   console.log(msg.content.info)
+          //   this.props.ws.removeAllListeners('stream');
           } else {
             console.log('expect message to be type "message" or content is empty')
           }

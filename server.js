@@ -52,18 +52,19 @@ binaryServer.on('connection', client => {
   console.log(`BinaryServer connection established: ${client.id}`);
 
   client.on('stream', stream =>{
-    console.log(`Receiving stream from client: ${client.id}`);
+
     let audioBuffer = []
 
     //PROCESS RECEPTION OF STREAM DATA AS EITHER AUDIO BUFFERS OR STRING MESSAGES
     stream.on('data', data => {
 
       if(Buffer.isBuffer(data)){
+        console.log(`Received stream from client: ${client.id}`);
 
         audioBuffer.push(data)
 
       } else {
-
+        console.log(`Received msg from client: ${client.id}`);
         let msg = JSON.parse(data);
 
         switch(msg.type) {
@@ -87,19 +88,25 @@ binaryServer.on('connection', client => {
 
           case 'registration':
             msg.content['id'] = client.id;
+            console.log('REG REQUEST:', msg.content)
 
             //CHECK IF ROOM IS VALID
             if(!checkRoomId(msg.content.roomId)) {
+
               let response = JSON.stringify({
-                type: 'error',
+                type: 'notification',
                 content: {
-                  text: "Room invalid."
+                  text: "error",
+                  info: 'Invalid Room Pin'
                 }
               });
               client.send(response);
               console.log(`Client id:${msg.content.id} name:${msg.content.name} submitted invalid roomId:${msg.content.roomId}`);
+
             } else {
+
               rooms[msg.content.roomId].addClient(msg.content)
+              console.log('ADDING CLIENT, ROOM HAS:', rooms[msg.content.roomId].clients)
               let response = JSON.stringify({
                 type: 'notification',
                 content: {
@@ -165,8 +172,7 @@ binaryServer.on('connection', client => {
           }
         }
         rooms[id].broadcastMessage(msg);
-        setTimeout(() => {delete rooms[id]}, 30000);
-        console.log(`Rooms ${rooms}`)
+        setTimeout(() => {delete rooms[id]}, 10000);
       }
     }
   });
