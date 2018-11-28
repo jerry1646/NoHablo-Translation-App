@@ -152,6 +152,9 @@ binaryServer.on('connection', client => {
   client.on('close', () => {
     console.log(`${client.id} disconnected.`)
     for(let id in rooms){
+      if (rooms[id].hasClient(client.id)) {
+        rooms[id].removeClient(client.id);
+      }
       if(rooms[id].getSpeaker() === client.id) {
         console.log(`Room Id: ${id} has shut down.`)
         let msg = {
@@ -162,7 +165,7 @@ binaryServer.on('connection', client => {
           }
         }
         rooms[id].broadcastMessage(msg);
-        setTimeout(() => {delete rooms[id]}, 10000);
+        setTimeout(() => {delete rooms[id]}, 30000);
         console.log(`Rooms ${rooms}`)
       }
     }
