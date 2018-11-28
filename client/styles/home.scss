@@ -22,7 +22,6 @@
   #logo-container{
     flex: 1;
     display: flex;
-
     a{
       line-height: 100px;
     }
@@ -30,6 +29,9 @@
 
   #middle-placeholder{
     flex: 1;
+    @media screen and (max-width: 900px){
+      flex: 0.2;
+    }
   }
 
   #navbar-button-container{
@@ -53,6 +55,8 @@
     font-weight: 500;
     color: white;
     font-size: 1.8em;
+
+
   }
 
   .main-nav button {
@@ -71,7 +75,7 @@
     border: none;
 
     height:50px;
-    width:160px;
+    width:140px;
 
     cursor: pointer;
     transition: all 600ms ease-in-out;
@@ -80,15 +84,6 @@
   .main-nav button:hover {
     background: #60B99A;
     transition: all 0.4s ease 0s;
-  }
-
-  /* Small screens */
-  @media all and (max-width: 800px) {
-    .main-nav {
-      /* On small screens, we are no longer using row direction but column */
-      flex-direction: column;
-      align-items: center;
-    }
   }
 
 
@@ -200,3 +195,5 @@
     }
   }
 }
+
+
