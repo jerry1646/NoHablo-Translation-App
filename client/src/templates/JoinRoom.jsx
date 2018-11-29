@@ -38,7 +38,7 @@ class JoinRoom extends React.Component{
   }
 
   handleStream = stream => {
-    console.log("Receiving response stream")
+    console.log("Receiving response")
 
     //HANDLE INCOMING DATA
     stream.on('data', data => {
@@ -54,12 +54,12 @@ class JoinRoom extends React.Component{
           this.props.parentMethods.changeRoomName(msg.content.name);
           this.props.parentMethods.changeLanguage(msg.content.language);
 
-          this.props.parentStates.ws.removeAllListeners('stream');
+          // this.props.parentStates.ws.removeAllListeners('stream');
 
           this.props.parentMethods.changeView("Listener");
 
-        } else {
-          let errorMsg = `Join room request denied - ${msg.content.type}: ${msg.content.text}`
+        } else if(msg.type === 'notification' && msg.content.text === 'error'){
+          let errorMsg = `Join room request denied: ${msg.content.info}`
           this.setState({errorMessage: errorMsg, displayError: true})
           console.log(errorMsg);
         }
