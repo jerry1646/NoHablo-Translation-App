@@ -1,11 +1,6 @@
-/*
-    code with original record buttons
-*/
-
-// wireframe: https://wireframe.cc/Ukwx24
 import React, {Component} from 'react';
-import Audio from '../components/browser_audio/Audio.jsx'
-import TextMessages from '../components/textMessages/textMessages.js'
+import Audio from '../components/audioRecorder/AudioRecorder.js'
+import TextMessages from '../components/textMessages/TextMessages.js'
 import ConnectionIndicator from '../components/connectionIndicator/ConnectionIndicator.js'
 
 

@@ -14,13 +14,16 @@ class AudioPlayer extends Component {
   }
 
   componentDidMount(){
-    console.log("Mounted audio player.");
+
+    //Initiate and configure browser audio player
 
     var audioContext = window.AudioContext || window.webkitAudioContext;
     var soundController = {};
+    var audioCache = [];
+
     soundController.speakerContext = new audioContext();
 
-    var audioCache = [];
+    //Websocket listener
 
     this.props.ws.on('stream', stream => {
       soundController.nextTime = 0;
@@ -30,9 +33,8 @@ class AudioPlayer extends Component {
 
       this.showSVG();
 
-      //HANDLE INCOMING DATA
       stream.on('data', data => {
-        console.log(`Audio player received data: ${data}`)
+        //Only responsible for binary audio data
         if (data && data.byteLength){
           var byteArray = data;
 
@@ -55,17 +57,16 @@ class AudioPlayer extends Component {
       });
 
 
-      //HANDLE STREAM CLOSING
       stream.on('end', () => {
         console.log('end of data stream...')
       });
 
     });
 
+    //Web audio player method
     soundController.playCache = cache => {
       let totalTime = 0;
       while(cache.length) {
-        console.log(`Cache length: ${cache.length}`)
         let buffer = cache.shift();
         let source = soundController.speakerContext.createBufferSource();
         source.buffer = buffer;
@@ -77,10 +78,9 @@ class AudioPlayer extends Component {
 
         source.start(soundController.nextTime);
         soundController.nextTime += source.buffer.duration;
-        console.log(`Duration: ${source.buffer.duration}`)
-        console.log(`Next time: ${soundController.nextTime}`)
       }
-      console.log(totalTime)
+
+      //Show animation in the duration of audio play
       setTimeout(()=>{this.hideSVG()}, totalTime*1000);
     }
 
@@ -89,6 +89,7 @@ class AudioPlayer extends Component {
   render(){
     return (
       <div>
+
         <div className='animated-svg' id='listener-visualizer'>
         {this.state.showSVG &&
         ( <CSSTransition
@@ -103,6 +104,7 @@ class AudioPlayer extends Component {
           </CSSTransition>
         )}
         </div>
+
         <div className='bottom-bar'>
           <div className='side-buttons'>
           </div>
@@ -112,6 +114,7 @@ class AudioPlayer extends Component {
             </i>
           </div>
         </div>
+
       </div>
     )
   }
@@ -136,7 +139,6 @@ class AudioPlayer extends Component {
       showSVG: false
     })
   }
-
 
 }
 

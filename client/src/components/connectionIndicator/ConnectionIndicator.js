@@ -10,14 +10,13 @@ class ConnectionIndicator extends Component {
   }
 
   componentDidMount(){
-    console.log("Mounted connection indicator")
 
     this.props.ws.on('stream', stream => {
 
       stream.on('data', data =>{
         if(data && typeof(data) == 'string'){
           let msg = JSON.parse(data)
-          console.log('data received', data)
+
           if(msg.type === 'notification' && msg.content.text === 'room-closed'){
             this.setState({connected: false})
           }

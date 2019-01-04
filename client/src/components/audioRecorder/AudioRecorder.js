@@ -1,7 +1,4 @@
 import React, {Component} from 'react';
-// import {startRecording, stopRecording} from './helper.js'
-// import recorder from './recorder.js'
-// import * as dat from 'dat.gui';
 
 
 class Audio extends Component {
@@ -15,7 +12,7 @@ class Audio extends Component {
     }
 
    /*************************
-      Audio Record Variables
+      Audio Recorder Variables
     **************************/
     this.gumStream; //stream from getUserMedia()
     this.rec; //Recorder.js object
@@ -23,9 +20,6 @@ class Audio extends Component {
     this.AudioContext;
     this.audioContext; //new audio context to help us record
 
-    // this.startRecording = this.startRecording.bind(this);
-    // this.stopRecording = this.stopRecording.bind(this);
-    // this.getWavAudio = this.getWavAudio.bind(this);
     this.analyser;
 
 
@@ -69,7 +63,6 @@ class Audio extends Component {
     this.audioContext = new AudioContext; //new audio context to help us recordß
 
     this.ctx = canvas.getContext("2d");
-    // this.analyser = this.audioContext.createAnalyser();
   }
 
   render(){
@@ -104,7 +97,7 @@ class Audio extends Component {
   }
 
 
-  //Private functions
+  //Helper methods
 
   toggleInfo = (e) => {
     let currentState = this.state.active
@@ -115,7 +108,6 @@ class Audio extends Component {
   }
 
   startRecording = () => {
-    console.log("recordButton clicked in Audio file");
 
     //instantiate analyser everything to reset visualizer
     this.analyser = this.audioContext.createAnalyser();
@@ -141,24 +133,28 @@ class Audio extends Component {
       .getUserMedia(displayConstraints)
       .then((stream) => {
         console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
-        /* assign to gumStream for later use */
         this.gumStream = stream;
-         // use the stream
+
+        //Use the stream
         this.input = this.audioContext.createMediaStreamSource(stream);
-        //numChannels:1 mono recording
+
+        //NumChannels:1 mono recording
         this.rec = new Recorder(this.input,{numChannels:1})
-        //start the recording process
+
+        //Start the recording process
         this.rec.record()
 
         console.log("Recording started");
-        //***********************
-        //    For Display Audio
-        //***********************
+
+        /***********************
+            For Audio Display
+        ***********************/
         this.setState({visualizeAudio:true})
         this.gotStream(stream);
       })
       .catch(function(err) {
-        //enable the record button if getUserMedia() fails
+
+        //Enable the record button if getUserMedia() fails
         console.log(err);
         recordButton.disabled = false;
         stopButton.disabled = true;
@@ -169,22 +165,21 @@ class Audio extends Component {
 
 
   stopRecording = () => {
-    console.log("stopButton clicked");
 
-    //disable the stop button, enable the record too allow for new recordings
+    //Disable the stop button, enable the record too allow for new recordings
     stopButton.disabled = true;
     recordButton.disabled = false;
 
-    //tell the recorder to stop the recording
+    //Tell the recorder to stop the recording
     this.rec.stop();
 
-    //stop microphone access
+    //Stop microphone access
     this.gumStream.getAudioTracks()[0].stop();
 
-    //create the wav blob and save blob data to RecordAudio
+    //Create the wav blob and save blob data to RecordAudio
     this.rec.exportWAV(this.getWavAudio)
 
-    //disable visualizer
+    //Disable visualizer
     this.setState({visualizeAudio:false})
     this.analyser=null;
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -199,8 +194,6 @@ class Audio extends Component {
   }
 
   gotStream = stream => {
-    // Create an AudioNode from the stream.
-    // mediaStreamSource = this.audioContext.createMediaStreamSource(stream);
 
     console.log('++++++++VISUAL+++++++++++')
     // Array to hold the analyzed frequencies
@@ -213,23 +206,23 @@ class Audio extends Component {
 
   visualize=()=>{
 
-    // set analysert props in the loop react on dat.gui changes
+    // Set analysert props in the loop react on dat.gui changes
     this.analyser.smoothingTimeConstant = this.opts.smoothing;
     this.analyser.fftSize = Math.pow(2, this.opts.fft);
     this.analyser.minDecibels = this.opts.minDecibels;
     this.analyser.maxDecibels = 0;
     this.analyser.getByteFrequencyData(this.freqs);
 
-    // set size to clear the canvas on each frame
+    // Set size to clear the canvas on each frame
     canvas.width = this.WIDTH;
     canvas.height = this.HEIGHT;
 
-    // draw three curves (R/G/B)
+    // Draw three curves (R/G/B)
     this.path(0);
     this.path(1);
     this.path(2);
 
-    // schedule next paint
+    // Schedule next paint
     if(this.state.visualizeAudio){
     requestAnimationFrame(this.visualize);
     } else {
@@ -317,17 +310,13 @@ class Audio extends Component {
     return this.freqs[band];
   }
 
-  /**
-   * Returns the scale factor fot the given value index.
-   * The index goes from 0 to 4 (curve with 5 peaks)
-   */
+  /*Returns the scale factor fot the given value index.
+    The index goes from 0 to 4 (curve with 5 peaks)*/
   scale=(i)=>{
     const x = Math.abs(2 - i); // 2,1,0,1,2
     const s = 3 - x;           // 1,2,3,2,1
     return s / 3 * this.opts.amp;
   }
-
-
 
 }
 

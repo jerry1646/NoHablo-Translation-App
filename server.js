@@ -1,5 +1,3 @@
-// const util = require('util')
-// const fs = require('fs');
 
 //Create simple express server
 const express = require('express')
@@ -8,27 +6,8 @@ const app = express()
 //Binary server = abstraction layer on top of socket.io to facilitate sending/receiving binary data.
 const BinaryServer = require('binaryjs').BinaryServer;
 
-// const translator = require('./lib/translator/test.js');
-// const translator = require('./lib/translator/test_buffer.js');
-
 //IMPORT CHATROOM CLASS
-const Chatroom = require('./lib/chatroom.js');
-
-
-const file_name = 'BrowserAudio.wav' //also output.mp3
-const file_path = './' + file_name
-
-// const file_name = 'output1.wav' //also output.mp3
-// const file_path = 'lib/translator/resources/' + file_name
-
-app.get('/api/users', (req, res) => {
-  const users = [
-    {id: 1, firstName: 'John', lastName: 'Doe'},
-    {id: 2, firstName: 'Steve', lastName: 'Stan'},
-    {id: 3, firstName: 'Marrie', lastName: 'Swanson'},
-  ]
-  res.json(users)
-})
+const Chatroom = require('./lib/Chatroom.js');
 
 const port = 5000
 
@@ -72,6 +51,7 @@ binaryServer.on('connection', client => {
           case 'create-room':
             rooms[currentRoomId] = new Chatroom(currentRoomId, msg.content.name, client.id, msg.content.language, binaryServer.clients);
             console.log(`Created a new room with id: ${currentRoomId}`)
+
             //Send room information to client to be shared
             let response = JSON.stringify({
               type: 'notification',
@@ -88,7 +68,6 @@ binaryServer.on('connection', client => {
 
           case 'registration':
             msg.content['id'] = client.id;
-            console.log('REG REQUEST:', msg.content)
 
             //CHECK IF ROOM IS VALID
             if(!checkRoomId(msg.content.roomId)) {
@@ -106,7 +85,6 @@ binaryServer.on('connection', client => {
             } else {
 
               rooms[msg.content.roomId].addClient(msg.content)
-              console.log('ADDING CLIENT, ROOM HAS:', rooms[msg.content.roomId].clients)
               let response = JSON.stringify({
                 type: 'notification',
                 content: {
@@ -121,7 +99,7 @@ binaryServer.on('connection', client => {
             }
             break;
           case 'message':
-            console.log("I got a message!");
+            console.log("I got a message but I don't know what to do with it!");
             break;
 
           default:
@@ -135,10 +113,9 @@ binaryServer.on('connection', client => {
     stream.on('end', () => {
       if(audioBuffer.length) {
         let bufferComplete = Buffer.concat(audioBuffer);
-        console.log(`-->SENDER: ${client.id}`)
         let streamTargetRoom;
+
         for(let roomId in rooms) {
-          console.log(`-->ROOM-${roomId}: ${rooms[roomId].getRoomId()}`)
           if(rooms[roomId].getSpeaker() === client.id) {
             streamTargetRoom = rooms[roomId];
           }
@@ -149,8 +126,6 @@ binaryServer.on('connection', client => {
         } else {
           console.log(`Trying to stream to undefined room`);
         }
-
-        console.log("speaker audio stream ended...");
       }
     });
 
@@ -172,6 +147,8 @@ binaryServer.on('connection', client => {
           }
         }
         rooms[id].broadcastMessage(msg);
+
+        //WAIT FOR 10 SECONDS TO ENSURE ROOM-CLOSING MESSAGE IS SENT OUT
         setTimeout(() => {delete rooms[id]}, 10000);
       }
     }

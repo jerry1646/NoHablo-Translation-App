@@ -20,9 +20,6 @@ class JoinRoom extends React.Component{
     event.preventDefault();
     event.persist();
 
-    //change App.jsx state.view to <Speaker/>
-    //generate random room id
-    //add room name, room id and speaker language to App.jsx state
     let msg = {
       type: 'registration',
       content: {
@@ -43,8 +40,6 @@ class JoinRoom extends React.Component{
     //HANDLE INCOMING DATA
     stream.on('data', data => {
 
-      console.log(data)
-
       if(data && typeof(data) == 'string') {
         let msg = JSON.parse(data);
 
@@ -53,8 +48,6 @@ class JoinRoom extends React.Component{
           this.props.parentMethods.changeRoomID(msg.content.id);
           this.props.parentMethods.changeRoomName(msg.content.name);
           this.props.parentMethods.changeLanguage(msg.content.language);
-
-          // this.props.parentStates.ws.removeAllListeners('stream');
 
           this.props.parentMethods.changeView("Listener");
 
@@ -116,8 +109,6 @@ class JoinRoom extends React.Component{
       </div>
     )
   }
-
-
 }
 
 

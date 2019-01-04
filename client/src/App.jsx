@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 
-import AudioPlayer from "./components/audioPlayer/audioPlayer";
-import Audio from './components/browser_audio/Audio.jsx'
 import Welcome from './templates/Welcome.jsx'
 import CreateRoom from './templates/CreateRoom.jsx'
 import JoinRoom from './templates/JoinRoom.jsx'

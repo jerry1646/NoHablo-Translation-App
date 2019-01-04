@@ -12,35 +12,21 @@ class TextMessages extends Component {
   }
 
   componentDidMount(){
-    console.log("Mounted text message handler.");
 
     this.props.ws.on('stream', stream => {
-
-      console.log("TEXTMESSAGE: receiving data stream")
-
 
       //HANDLE INCOMING DATA
       stream.on('data', data => {
 
         console.log(`Text message handler received data: ${data}`)
-        if(data && typeof(data) == 'string'){
-          console.log('string data received: ',data)
 
+        //Only responsible for string messages
+        if(data && typeof(data) == 'string'){
           let msg = JSON.parse(data);
           if(msg.type === 'message' && msg.content.inText){
             const oldMessageList = this.state.messageList;
             const newMessageList = [...oldMessageList, msg.content];
             this.setState({messageList: newMessageList})
-            console.log(this.state.messageList)
-
-          // } else if(msg.type === 'notification' && msg.content.info) {
-
-          //   //****************************************
-          //   //*         EDIT HERE JERRY PLZ          *
-          //   //****************************************
-
-          //   console.log(msg.content.info)
-          //   this.props.ws.removeAllListeners('stream');
           } else {
             console.log('expect message to be type "message" or content is empty')
           }
@@ -54,7 +40,6 @@ class TextMessages extends Component {
       stream.on('end', () => {
         console.log('end of data stream...')
       });
-
     });
   }
 
@@ -65,10 +50,6 @@ class TextMessages extends Component {
       </div>
     )
   }
-
-  // scrollToBottom = () => {
-  //   this.endOfMsg.scrollIntoView({ behavior: "instant", block: "end" });
-  // }
 }
 
 export default TextMessages

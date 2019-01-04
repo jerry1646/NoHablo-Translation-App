@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 
 
-//Pass in audioContext as a prop
 class AudioVisualizer extends Component {
   constructor(){
     super();
@@ -59,8 +58,6 @@ class AudioVisualizer extends Component {
   }
 
   gotStream = stream => {
-    // Create an AudioNode from the stream.
-    // mediaStreamSource = this.audioContext.createMediaStreamSource(stream);
 
     // Create a new volume meter and connect it.
     this.meter = this.createAudioMeter(this.audioContext);
