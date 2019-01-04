@@ -8,7 +8,7 @@ class NavBar extends React.Component{
 
       <nav className="navigation main-nav">
           <div id='logo-container'>
-            <img id = 'logo' src="../styles/images/logo-bright.png"/>
+            <img id = 'logo' src="../src/images/logo-bright.png"/>
             <div>
             <a>No Hablo</a>
             </div>

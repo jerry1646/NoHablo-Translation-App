@@ -1,4 +1,3 @@
-
 import React, {Component} from 'react';
 import NavBar from './NavBar.jsx'
 
@@ -25,7 +24,7 @@ class Welcome extends React.Component{
         <div id="container2">
             <div id="col1" onClick={this.tx.getCreateRoomView}>
               <h2>Create a room</h2>
-              <figure><img src="../styles/images/speaker2.png" id="speaker"/></figure>
+              <figure><img src="../src/images/speaker.png" id="speaker"/></figure>
               <div className="info">
                 <p>
                   Create a room so that others can listen to you!
@@ -37,7 +36,7 @@ class Welcome extends React.Component{
             </div>
             <div id="col2" onClick={this.tx.getJoinRoomView}>
               <h2>Join a Room</h2>
-              <figure><img src="../styles/images/headphones2.png" id="listener"/></figure>
+              <figure><img src="../src/images/headphones.png" id="listener"/></figure>
               <div className="info">
                 <p>
                   Join a room and listener in your native tongue!

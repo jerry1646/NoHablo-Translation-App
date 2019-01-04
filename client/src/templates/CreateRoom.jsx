@@ -20,10 +20,6 @@ class CreateRoom extends React.Component{
     event.preventDefault();
     event.persist();
 
-    console.log(event.target.speakerLanguage)
-    //change App.jsx state.view to <Speaker/>
-    //generate random room id
-    //add room name, room id and speaker language to App.jsx state
     let msg = {
       type: 'create-room',
       content: {
@@ -33,17 +29,13 @@ class CreateRoom extends React.Component{
     }
     console.log(`Attempting to create room.`)
     this.props.parentStates.ws.send(JSON.stringify(msg));
-
     this.props.parentStates.ws.on('stream', this.handleStream);
   }
 
   handleStream = stream => {
       console.log("Receiving response stream")
 
-      //HANDLE INCOMING DATA
       stream.on('data', data => {
-
-        console.log("Receiving data")
 
         if(data && typeof(data) == 'string'){
           let msg = JSON.parse(data);

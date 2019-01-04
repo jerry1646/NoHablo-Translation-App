@@ -1,10 +1,5 @@
-/*
-    code with original record buttons
-*/
-// wireframe: https://wireframe.cc/jdpSn6
-// https://codepen.io/fgnass/pen/LWeKNq
-import AudioPlayer from '../components/audioPlayer/audioPlayer.js'
-import TextMessages from '../components/textMessages/textMessages.js'
+import AudioPlayer from '../components/audioPlayer/AudioPlayer.js'
+import TextMessages from '../components/textMessages/TextMessages.js'
 import ConnectionIndicator from '../components/connectionIndicator/ConnectionIndicator.js'
 
 import React, {Component} from 'react';
@@ -28,6 +23,7 @@ class Listener extends Component {
   render() {
     return (
       <div className='chatroom' id='listener-view'>
+
         <div className='message-container'>
           <div className='top-bar'>
             <div className='chatroom-logo'/>
@@ -57,8 +53,9 @@ class Listener extends Component {
 
           )}
           </div>
-
         </div>
+
+
         <AudioPlayer ws={this.props.parentStates.ws} methods={this.tx}/>
       </div>
     )
