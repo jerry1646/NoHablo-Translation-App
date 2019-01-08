@@ -11,14 +11,14 @@ This repository is for development. Webpack dev server is set up to make life ea
 ### Getting Started
 
 1. Clone this repository.
-2. In both project root directory and "./client", run `npm install` command to install dependencies.
-3. Set up your own Google Cloud service (instructions below)
-4. Configure environment (install nvm / node)
+2. Configure environment (install nvm / node)
 ```
 nvm use node 8.9.4
 npm install -g npm@5.2.0
 ````
 - Note: Specific version of Node is used to ensure compatibility with dependencies
+3. In both project root directory and "./client", run `npm install` command to install dependencies.
+4. Set up your own Google Cloud service account and set the environment variable (instructions below).
 5. In both project root directory and "./client", run `npm start` command and the app will be served at `http://localhost:3000`
 - REMEMBER to set the environment variable for your Google Cloud credential before attempting to run the app.
 
